@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donor Registration — LifePulse</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-rose-100 selection:text-rose-900">
+
+  <!-- NAVIGATION -->
+  <header class="glass-nav sticky top-0 z-40">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Back to Directory</span>
+      </a>
+
+      <button onclick="shareFormLink()" class="text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+        <span>Share Form</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN REGISTRATION -->
+  <main class="max-w-2xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
+    
+    <div class="text-center mb-6">
+      <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center font-bold text-lg mx-auto mb-2.5">
+        🩸
+      </div>
+      <h1 class="text-2xl font-black text-slate-900 tracking-tight">Register as Blood Donor</h1>
+      <p class="text-xs text-slate-500 mt-1">
+        Help save lives in your area. Your contact information connects you directly to those in need.
+      </p>
+    </div>
+
+    <!-- FORM -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
+      <form id="donor-form" onsubmit="handleDonorSubmit(event)" class="space-y-5 text-xs">
+
+        <!-- Blood Group -->
+        <div>
+          <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2">
+            1. Select Blood Group <span class="text-rose-600">*</span>
+          </label>
+          <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5" id="blood-selector">
+            <button type="button" onclick="selectBloodGroup('A+')" class="bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400" data-group="A+">A+</button>
+            <button type="button" onclick="selectBloodGroup('A-')" class="bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400" data-group="A-">A-</button>
+            <button type="button" onclick="selectBloodGroup('B+')" class="bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400" data-group="B+">B+</button>
+            <button type="button" onclick="selectBloodGroup('B-')" class="bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400" data-group="B-">B-</button>
+            <button type="button" onclick="selectBloodGroup('AB+')" class="bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400" data-group="AB+">AB+</button>
+            <button type="button" onclick="selectBloodGroup('AB-')" class="bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400" data-group="AB-">AB-</button>
+            <button type="button" onclick="selectBloodGroup('O+')" class="bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400" data-group="O+">O+</button>
+            <button type="button" onclick="selectBloodGroup('O-')" class="bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400" data-group="O-">O-</button>
+          </div>
+          <input type="hidden" id="blood_group" required>
+        </div>
+
+        <!-- Personal Info -->
+        <div class="pt-2 border-t border-slate-100">
+          <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2.5">
+            2. Personal Details
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <div class="sm:col-span-6">
+              <label class="block font-semibold text-slate-600 mb-1">Full Name *</label>
+              <input type="text" id="name" required placeholder="Your full name" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block font-semibold text-slate-600 mb-1">Age *</label>
+              <input type="number" id="age" min="18" max="70" required placeholder="18-65" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block font-semibold text-slate-600 mb-1">Gender</label>
+              <select id="gender" class="input-minimal w-full px-2.5 py-2 rounded-xl">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="pt-2 border-t border-slate-100">
+          <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2.5">
+            3. Contact Information
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-600 mb-1">Phone Number *</label>
+              <input type="tel" id="phone" required placeholder="+1 555-0192" oninput="syncWhatsapp()" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="font-semibold text-slate-600">WhatsApp Number</label>
+                <label class="flex items-center gap-1 text-[11px] text-slate-400 cursor-pointer">
+                  <input type="checkbox" id="same-as-phone" checked onchange="handleSameAsPhone()" class="rounded border-slate-300 text-slate-900 focus:ring-0">
+                  <span>Same as phone</span>
+                </label>
+              </div>
+              <input type="tel" id="whatsapp" placeholder="WhatsApp Number" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block font-semibold text-slate-600 mb-1">Email (Optional)</label>
+              <input type="email" id="email" placeholder="email@example.com" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="pt-2 border-t border-slate-100">
+          <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2.5">
+            4. Location
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-600 mb-1">City / Town *</label>
+              <input type="text" id="city" required placeholder="e.g. New York" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-600 mb-1">Area / Neighborhood</label>
+              <input type="text" id="area" placeholder="e.g. Brooklyn" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-600 mb-1">State / Region</label>
+              <input type="text" id="state" placeholder="e.g. NY" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-600 mb-1">Postal Code</label>
+              <input type="text" id="pincode" placeholder="e.g. 10001" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+          </div>
+        </div>
+
+        <!-- Donation History -->
+        <div class="pt-2 border-t border-slate-100">
+          <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2.5">
+            5. Donation History
+          </label>
+          <div class="space-y-3">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="font-semibold text-slate-600">Last Blood Donation Date</label>
+                <label class="flex items-center gap-1.5 text-rose-600 font-bold cursor-pointer">
+                  <input type="checkbox" id="first-time-donor" onchange="handleFirstTimeToggle()" class="rounded border-slate-300 text-rose-600 focus:ring-0">
+                  <span>First time donor</span>
+                </label>
+              </div>
+              <input type="date" id="last-donation-date" onchange="calculateEligibilityPreview()" class="input-minimal w-full px-3 py-2 rounded-xl">
+              <div id="eligibility-status-box" class="hidden mt-2 p-2.5 rounded-xl font-medium text-xs"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-semibold text-slate-600 mb-1">Availability</label>
+                <select id="availability" class="input-minimal w-full px-3 py-2 rounded-xl">
+                  <option value="available">Available to donate</option>
+                  <option value="emergency_only">Only life-threatening emergencies</option>
+                  <option value="unavailable">Temporarily unavailable</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-600 mb-1">Emergency Call Readiness</label>
+                <select id="emergency_ready" class="input-minimal w-full px-3 py-2 rounded-xl">
+                  <option value="1">Ready for 24/7 emergency calls</option>
+                  <option value="0">Standard daytime hours only</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-semibold text-slate-600 mb-1">Notes (Optional)</label>
+              <input type="text" id="notes" placeholder="e.g. Near Memorial Hospital" class="input-minimal w-full px-3 py-2 rounded-xl">
+            </div>
+          </div>
+        </div>
+
+        <!-- Health Checklist -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-1.5 text-slate-600">
+          <label class="flex items-start gap-2 cursor-pointer">
+            <input type="checkbox" required class="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-0">
+            <span>I weigh at least 50 kg (110 lbs) and feel healthy today.</span>
+          </label>
+          <label class="flex items-start gap-2 cursor-pointer">
+            <input type="checkbox" required class="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-0">
+            <span>I agree to be contacted for emergency blood donation requests.</span>
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-2">
+          <button type="submit" id="submit-btn" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl transition shadow-sm flex items-center justify-center gap-2">
+            <span>Submit Registration</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+
+  <!-- SUCCESS MODAL -->
+  <div id="success-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center border border-slate-200 shadow-xl">
+      <div class="w-12 h-12 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">
+        ✓
+      </div>
+      <h2 class="text-lg font-black text-slate-900 mb-1">Registered Successfully</h2>
+      <p class="text-xs text-slate-500 mb-5">You are now listed in the voluntary blood donor network.</p>
+
+      <!-- Minimal Pass Card -->
+      <div class="bg-slate-900 text-white rounded-xl p-4 text-left mb-4 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] uppercase font-bold text-slate-400">Donor Badge</span>
+          <span id="pass-blood" class="bg-rose-600 text-white text-xs font-black px-2 py-0.5 rounded">O+</span>
+        </div>
+        <h4 id="pass-name" class="font-bold text-sm">John Doe</h4>
+        <p id="pass-location" class="text-xs text-slate-400">New York, NY</p>
+      </div>
+
+      <div class="space-y-2">
+        <button onclick="shareFormLink()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition">
+          Share Registration Link
+        </button>
+        <a href="/" class="block w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition">
+          Go to Public Directory
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+  <script>
+    let selectedBlood = '';
+
+    function selectBloodGroup(group) {
+      selectedBlood = group;
+      document.getElementById('blood_group').value = group;
+      document.querySelectorAll('.bg-blood-opt').forEach(btn => {
+        if (btn.getAttribute('data-group') === group) {
+          btn.className = 'bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition bg-slate-900 text-white border-slate-900 shadow-xs';
+        } else {
+          btn.className = 'bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400';
+        }
+      });
+    }
+
+    function syncWhatsapp() {
+      const same = document.getElementById('same-as-phone').checked;
+      if (same) {
+        document.getElementById('whatsapp').value = document.getElementById('phone').value;
+      }
+    }
+
+    function handleSameAsPhone() {
+      const same = document.getElementById('same-as-phone').checked;
+      const waInput = document.getElementById('whatsapp');
+      if (same) {
+        waInput.value = document.getElementById('phone').value;
+        waInput.readOnly = true;
+      } else {
+        waInput.readOnly = false;
+        waInput.focus();
+      }
+    }
+
+    function handleFirstTimeToggle() {
+      const isFirst = document.getElementById('first-time-donor').checked;
+      const dateInput = document.getElementById('last-donation-date');
+      const box = document.getElementById('eligibility-status-box');
+
+      if (isFirst) {
+        dateInput.value = '';
+        dateInput.disabled = true;
+        box.className = 'mt-2 p-2.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
+        box.innerHTML = '✅ <b>Eligible:</b> First-time donors are eligible immediately upon initial screening.';
+        box.classList.remove('hidden');
+      } else {
+        dateInput.disabled = false;
+        calculateEligibilityPreview();
+      }
+    }
+
+    function calculateEligibilityPreview() {
+      const dateVal = document.getElementById('last-donation-date').value;
+      const box = document.getElementById('eligibility-status-box');
+      if (!dateVal) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      const lastDate = new Date(dateVal);
+      const now = new Date();
+      const diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+      const cooldown = 90;
+
+      box.classList.remove('hidden');
+      if (diffDays >= cooldown) {
+        box.className = 'mt-2 p-2.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
+        box.innerHTML = `✅ <b>Eligible:</b> ${diffDays} days since last donation (90-day cooldown complete).`;
+      } else {
+        const remaining = cooldown - diffDays;
+        box.className = 'mt-2 p-2.5 rounded-xl text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200';
+        box.innerHTML = `⏳ <b>In Recovery Cooldown:</b> Eligible again in <b>${remaining} days</b>.`;
+      }
+    }
+
+    async function handleDonorSubmit(e) {
+      e.preventDefault();
+      if (!selectedBlood) {
+        showToast('Please select your blood group', 'error');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      const isFirstTime = document.getElementById('first-time-donor').checked;
+      const payload = {
+        name: document.getElementById('name').value,
+        blood_group: selectedBlood,
+        phone: document.getElementById('phone').value,
+        whatsapp: document.getElementById('whatsapp').value || document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        age: document.getElementById('age').value,
+        gender: document.getElementById('gender').value,
+        city: document.getElementById('city').value,
+        area: document.getElementById('area').value,
+        state: document.getElementById('state').value,
+        pincode: document.getElementById('pincode').value,
+        last_donation_date: isFirstTime ? null : document.getElementById('last-donation-date').value,
+        is_first_time: isFirstTime,
+        availability: document.getElementById('availability').value,
+        emergency_ready: parseInt(document.getElementById('emergency_ready').value, 10),
+        notes: document.getElementById('notes').value
+      };
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = 'Submitting...';
+
+      try {
+        const res = await fetch('/api/donors', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          document.getElementById('pass-name').textContent = payload.name;
+          document.getElementById('pass-blood').textContent = payload.blood_group;
+          document.getElementById('pass-location').textContent = `${payload.city}${payload.state ? ', ' + payload.state : ''}`;
+          document.getElementById('success-modal').classList.remove('hidden');
+        } else {
+          showToast(data.error || 'Failed to submit', 'error');
+          btn.disabled = false;
+          btn.innerHTML = 'Submit Registration';
+        }
+      } catch (err) {
+        showToast('Network error while registering', 'error');
+        btn.disabled = false;
+        btn.innerHTML = 'Submit Registration';
+      }
+    }
+
+    function shareFormLink() {
+      const url = window.location.href;
+      shareLink('LifePulse Blood Donor Registration', 'Register as voluntary donor to help save lives.', url);
+    }
+  </script>
+</body>
+</html>

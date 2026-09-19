@@ -1,0 +1,23 @@
+{
+  "name": "blood-donor-directory",
+  "version": "1.0.0",
+  "description": "Blood Donor Directory & Management Platform with public search, shareable registration, emergency requests, and admin dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "mongodb": "^6.8.0"
+  },
+  "keywords": [
+    "blood-donation",
+    "donor-directory",
+    "blood-bank",
+    "admin-dashboard",
+    "mongodb",
+    "vercel"
+  ],
+  "author": "",
+  "license": "MIT"
+}

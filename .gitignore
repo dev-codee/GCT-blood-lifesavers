@@ -1,0 +1,8 @@
+node_modules/
+.vercel/
+.env
+.env.local
+*.log
+
+*.db
+blood_directory.db

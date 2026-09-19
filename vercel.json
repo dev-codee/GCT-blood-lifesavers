@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/register", "destination": "/register.html" },
+    { "source": "/join", "destination": "/register.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/api/(.*)", "destination": "/api/index.js" }
+  ]
+}
