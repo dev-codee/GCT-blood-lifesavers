@@ -4,12 +4,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const db = require('./lib/db');
+const { makeToken, verifyToken, isAuthorized, verifyAdminCredentials } = require('./lib/auth');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
-
-// In-memory active tokens (local dev session)
-const activeAdminTokens = new Set();
 
 function sendJson(res, statusCode, data) {
   res.writeHead(statusCode, {
@@ -58,16 +56,6 @@ function serveFile(res, filePath) {
     res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' });
     res.end(content);
   });
-}
-
-function isAuthorized(req) {
-  const authHeader = req.headers['authorization'] || '';
-  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  if (token && activeAdminTokens.has(token)) return true;
-  const cookies = req.headers['cookie'] || '';
-  const match = cookies.match(/admin_token=([a-f0-9]+)/);
-  if (match && activeAdminTokens.has(match[1])) return true;
-  return false;
 }
 
 const server = http.createServer(async (req, res) => {
@@ -182,28 +170,29 @@ const server = http.createServer(async (req, res) => {
       const body = await parseJsonBody(req);
       let isValid = false;
       try {
-        isValid = db.verifyAdminCredentials(body.username || '', body.password || '');
+        isValid = verifyAdminCredentials(body.username || '', body.password || '');
       } catch (e) {
         return sendJson(res, 500, { success: false, error: e.message });
       }
       if (isValid) {
-        const token = crypto.randomBytes(32).toString('hex');
-        activeAdminTokens.add(token);
-        // Auto-expire token after 8 hours
-        setTimeout(() => activeAdminTokens.delete(token), 8 * 60 * 60 * 1000);
+        const token = makeToken();
         res.writeHead(200, {
           'Content-Type': 'application/json',
-          'Set-Cookie': `admin_token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=28800`
+          'Set-Cookie': `admin_token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=604800`
         });
         return res.end(JSON.stringify({ success: true, token }));
       }
-      return sendJson(res, 401, { success: false, error: 'Invalid credentials' });
+      return sendJson(res, 401, { success: false, error: 'Invalid username or password' });
+    }
+
+    if (pathname === '/api/admin/check-auth' || pathname === '/api/admin/check') {
+      if (isAuthorized(req)) {
+        return sendJson(res, 200, { success: true, authenticated: true });
+      }
+      return sendJson(res, 401, { success: false, authenticated: false, error: 'Session expired' });
     }
 
     if (pathname === '/api/admin/logout' && method === 'POST') {
-      const authHeader = req.headers['authorization'] || '';
-      const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-      if (token) activeAdminTokens.delete(token);
       res.writeHead(200, { 'Content-Type': 'application/json', 'Set-Cookie': 'admin_token=; Max-Age=0; Path=/' });
       return res.end(JSON.stringify({ success: true }));
     }

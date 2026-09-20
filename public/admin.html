@@ -327,10 +327,32 @@
     const ADMIN_PAGE_SIZE = 20;
     let adminCurrentPage = 1;
 
-    document.addEventListener('DOMContentLoaded', () => {
-      if (adminToken) showDashboard();
-      else showLogin();
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (adminToken) {
+        try {
+          const res = await fetch('/api/admin/check-auth', {
+            headers: { 'Authorization': `Bearer ${adminToken}` }
+          });
+          if (res.ok) {
+            showDashboard();
+            return;
+          }
+        } catch (_) {}
+        handleAuthExpired(false);
+      } else {
+        showLogin();
+      }
     });
+
+    function handleAuthExpired(notify = true) {
+      adminToken = '';
+      localStorage.removeItem('life_pulse_admin_token');
+      document.cookie = 'admin_token=; Max-Age=0; path=/;';
+      showLogin();
+      if (notify) {
+        showToast('Session expired or unauthorized. Please sign in.', 'error');
+      }
+    }
 
     function showLogin() {
       document.getElementById('login-view').classList.remove('hidden');
@@ -556,6 +578,10 @@
           },
           body: JSON.stringify({ id, is_verified: newStatus })
         });
+        if (res.status === 401) {
+          handleAuthExpired(true);
+          return;
+        }
         const data = await res.json();
         if (data.success) {
           showToast('Verification status updated', 'success');
@@ -580,6 +606,10 @@
           },
           body: JSON.stringify({ id })
         });
+        if (res.status === 401) {
+          handleAuthExpired(true);
+          return;
+        }
         const data = await res.json();
         if (data.success) {
           showToast('Donor deleted successfully', 'success');
@@ -663,6 +693,10 @@
           },
           body: JSON.stringify(payload)
         });
+        if (res.status === 401) {
+          handleAuthExpired(true);
+          return;
+        }
         const data = await res.json();
         if (data.success) {
           showToast(isNew ? 'Donor added successfully' : 'Donor updated successfully', 'success');
@@ -718,6 +752,10 @@
           },
           body: JSON.stringify({ id, status: 'fulfilled' })
         });
+        if (res.status === 401) {
+          handleAuthExpired(true);
+          return;
+        }
         const data = await res.json();
         if (data.success) {
           showToast('Request fulfilled', 'success');
@@ -740,6 +778,10 @@
           },
           body: JSON.stringify({ id })
         });
+        if (res.status === 401) {
+          handleAuthExpired(true);
+          return;
+        }
         const data = await res.json();
         if (data.success) {
           showToast('Request removed', 'success');
@@ -748,39 +790,6 @@
         }
       } catch (err) {
         showToast('Error deleting request', 'error');
-      }
-    }
-
-    function openChangePasswordModal() {
-      document.getElementById('password-modal').classList.remove('hidden');
-    }
-
-    function closeChangePasswordModal() {
-      document.getElementById('password-modal').classList.add('hidden');
-    }
-
-    async function handleChangePassword(e) {
-      e.preventDefault();
-      const newPassword = document.getElementById('new-password').value;
-      try {
-        const res = await fetch('/api/admin/change-password', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${adminToken}`
-          },
-          body: JSON.stringify({ newPassword })
-        });
-        const data = await res.json();
-        if (data.success) {
-          showToast('Password updated', 'success');
-          closeChangePasswordModal();
-          document.getElementById('new-password').value = '';
-        } else {
-          showToast(data.error || 'Failed to update password', 'error');
-        }
-      } catch (err) {
-        showToast('Network error', 'error');
       }
     }
 
