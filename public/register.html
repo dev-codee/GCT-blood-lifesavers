@@ -29,14 +29,14 @@
 
   <!-- MAIN REGISTRATION -->
   <main class="max-w-2xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
-    
+
     <div class="text-center mb-6">
       <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center font-bold text-lg mx-auto mb-2.5">
         🩸
       </div>
       <h1 class="text-2xl font-black text-slate-900 tracking-tight">Register as Blood Donor</h1>
       <p class="text-xs text-slate-500 mt-1">
-        Apna blood group register karein aur Pakistan mein zarooratmand logon ki madad karein.
+        Help save lives in your area. Your contact information connects you directly to those in need.
       </p>
     </div>
 
@@ -47,7 +47,7 @@
         <!-- Blood Group -->
         <div>
           <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2">
-            1. Blood Group <span class="text-rose-600">*</span>
+            1. Select Blood Group <span class="text-rose-600">*</span>
           </label>
           <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5" id="blood-selector">
             <button type="button" onclick="selectBloodGroup('A+')" class="bg-blood-opt py-2.5 px-2 rounded-xl font-black text-sm border text-center transition border-slate-200 bg-white text-slate-800 hover:border-slate-400" data-group="A+">A+</button>
@@ -65,23 +65,23 @@
         <!-- Personal Info -->
         <div class="pt-2 border-t border-slate-100">
           <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2.5">
-            2. Zaati Maloomat (Personal Details)
+            2. Personal Details
           </label>
           <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
             <div class="sm:col-span-6">
-              <label class="block font-semibold text-slate-600 mb-1">Poora Naam (Full Name) *</label>
-              <input type="text" id="name" required placeholder="Jaise: Ahmed Ali Khan" class="input-minimal w-full px-3 py-2 rounded-xl">
+              <label class="block font-semibold text-slate-600 mb-1">Full Name *</label>
+              <input type="text" id="name" required placeholder="e.g. Ahmed Ali Khan" class="input-minimal w-full px-3 py-2 rounded-xl">
             </div>
             <div class="sm:col-span-3">
-              <label class="block font-semibold text-slate-600 mb-1">Umar (Age) *</label>
+              <label class="block font-semibold text-slate-600 mb-1">Age *</label>
               <input type="number" id="age" min="18" max="65" required placeholder="18–65" class="input-minimal w-full px-3 py-2 rounded-xl">
             </div>
             <div class="sm:col-span-3">
-              <label class="block font-semibold text-slate-600 mb-1">Jins (Gender)</label>
+              <label class="block font-semibold text-slate-600 mb-1">Gender</label>
               <select id="gender" class="input-minimal w-full px-2.5 py-2 rounded-xl">
-                <option value="Male">Mard (Male)</option>
-                <option value="Female">Aurat (Female)</option>
-                <option value="Other">Doosra (Other)</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           </div>
@@ -90,26 +90,26 @@
         <!-- Contact Info -->
         <div class="pt-2 border-t border-slate-100">
           <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2.5">
-            3. Rabta Maloomat (Contact)
+            3. Contact Information
           </label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block font-semibold text-slate-600 mb-1">Mobile Number *</label>
-              <input type="tel" id="phone" required placeholder="0300-1234567" oninput="syncWhatsapp()" class="input-minimal w-full px-3 py-2 rounded-xl">
-              <p class="text-[10px] text-slate-400 mt-0.5">Jaise: 0300-1234567 ya +92 300 1234567</p>
+              <label class="block font-semibold text-slate-600 mb-1">Phone Number *</label>
+              <input type="tel" id="phone" required placeholder="e.g. 0300-1234567" oninput="syncWhatsapp()" class="input-minimal w-full px-3 py-2 rounded-xl">
+              <p class="text-[10px] text-slate-400 mt-0.5">Pakistan format: 03xx-xxxxxxx or +92 3xx xxxxxxx</p>
             </div>
             <div>
               <div class="flex items-center justify-between mb-1">
                 <label class="font-semibold text-slate-600">WhatsApp Number</label>
                 <label class="flex items-center gap-1 text-[11px] text-slate-400 cursor-pointer">
                   <input type="checkbox" id="same-as-phone" checked onchange="handleSameAsPhone()" class="rounded border-slate-300 text-slate-900 focus:ring-0">
-                  <span>Phone jaisa hi</span>
+                  <span>Same as phone</span>
                 </label>
               </div>
-              <input type="tel" id="whatsapp" placeholder="0300-1234567" class="input-minimal w-full px-3 py-2 rounded-xl">
+              <input type="tel" id="whatsapp" placeholder="e.g. 0300-1234567" class="input-minimal w-full px-3 py-2 rounded-xl">
             </div>
             <div class="sm:col-span-2">
-              <label class="block font-semibold text-slate-600 mb-1">Email (Ikhtiyaari / Optional)</label>
+              <label class="block font-semibold text-slate-600 mb-1">Email (Optional)</label>
               <input type="email" id="email" placeholder="email@example.com" class="input-minimal w-full px-3 py-2 rounded-xl">
             </div>
           </div>
@@ -118,53 +118,32 @@
         <!-- Location -->
         <div class="pt-2 border-t border-slate-100">
           <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2.5">
-            4. Maqam (Location)
+            4. Location
           </label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block font-semibold text-slate-600 mb-1">Shehar (City) *</label>
-              <input type="text" id="city" required placeholder="Jaise: Karachi, Lahore, Gujrat" list="city-list" class="input-minimal w-full px-3 py-2 rounded-xl">
+              <label class="block font-semibold text-slate-600 mb-1">City *</label>
+              <input type="text" id="city" required placeholder="e.g. Karachi, Lahore, Gujrat" list="city-list" class="input-minimal w-full px-3 py-2 rounded-xl">
               <datalist id="city-list">
-                <option value="Karachi">
-                <option value="Lahore">
-                <option value="Islamabad">
-                <option value="Rawalpindi">
-                <option value="Faisalabad">
-                <option value="Multan">
-                <option value="Gujranwala">
-                <option value="Gujrat">
-                <option value="Sialkot">
-                <option value="Peshawar">
-                <option value="Quetta">
-                <option value="Hyderabad">
-                <option value="Sukkur">
-                <option value="Larkana">
-                <option value="Bahawalpur">
-                <option value="Sargodha">
-                <option value="Sheikhupura">
-                <option value="Jhang">
-                <option value="Rahim Yar Khan">
-                <option value="Mardan">
-                <option value="Mingora">
-                <option value="Kasur">
-                <option value="Dera Ghazi Khan">
-                <option value="Nawabshah">
-                <option value="Sahiwal">
-                <option value="Mirpur Khas">
-                <option value="Okara">
-                <option value="Mandi Bahauddin">
-                <option value="Abbottabad">
-                <option value="Muzaffarabad">
+                <option value="Karachi"><option value="Lahore"><option value="Islamabad">
+                <option value="Rawalpindi"><option value="Faisalabad"><option value="Multan">
+                <option value="Gujranwala"><option value="Gujrat"><option value="Sialkot">
+                <option value="Peshawar"><option value="Quetta"><option value="Hyderabad">
+                <option value="Sukkur"><option value="Larkana"><option value="Bahawalpur">
+                <option value="Sargodha"><option value="Sheikhupura"><option value="Jhang">
+                <option value="Rahim Yar Khan"><option value="Mardan"><option value="Mingora">
+                <option value="Kasur"><option value="Dera Ghazi Khan"><option value="Sahiwal">
+                <option value="Abbottabad"><option value="Muzaffarabad"><option value="Mandi Bahauddin">
               </datalist>
             </div>
             <div>
-              <label class="block font-semibold text-slate-600 mb-1">Mohalla / Ilaaqa (Area)</label>
-              <input type="text" id="area" placeholder="Jaise: Gulshan-e-Iqbal, Model Town, F-10" class="input-minimal w-full px-3 py-2 rounded-xl">
+              <label class="block font-semibold text-slate-600 mb-1">Area / Neighbourhood</label>
+              <input type="text" id="area" placeholder="e.g. Gulshan-e-Iqbal, Model Town, F-10" class="input-minimal w-full px-3 py-2 rounded-xl">
             </div>
             <div>
-              <label class="block font-semibold text-slate-600 mb-1">Suba (Province)</label>
+              <label class="block font-semibold text-slate-600 mb-1">Province</label>
               <select id="state" class="input-minimal w-full px-3 py-2 rounded-xl">
-                <option value="">-- Suba chunain --</option>
+                <option value="">-- Select Province --</option>
                 <option value="Punjab">Punjab</option>
                 <option value="Sindh">Sindh</option>
                 <option value="KPK">Khyber Pakhtunkhwa (KPK)</option>
@@ -175,8 +154,8 @@
               </select>
             </div>
             <div>
-              <label class="block font-semibold text-slate-600 mb-1">Postal Code (Ikhtiyaari)</label>
-              <input type="text" id="pincode" placeholder="Jaise: 75300, 54000" maxlength="6" class="input-minimal w-full px-3 py-2 rounded-xl">
+              <label class="block font-semibold text-slate-600 mb-1">Postal Code (Optional)</label>
+              <input type="text" id="pincode" placeholder="e.g. 75300, 54000" maxlength="6" class="input-minimal w-full px-3 py-2 rounded-xl">
             </div>
           </div>
         </div>
@@ -184,15 +163,15 @@
         <!-- Donation History -->
         <div class="pt-2 border-t border-slate-100">
           <label class="block font-bold text-slate-700 uppercase tracking-wider mb-2.5">
-            5. Khoon Dene Ki Taareekh (Donation History)
+            5. Donation History
           </label>
           <div class="space-y-3">
             <div>
               <div class="flex items-center justify-between mb-1">
-                <label class="font-semibold text-slate-600">Akhri Khoon Dene Ki Taareekh</label>
+                <label class="font-semibold text-slate-600">Last Blood Donation Date</label>
                 <label class="flex items-center gap-1.5 text-rose-600 font-bold cursor-pointer">
                   <input type="checkbox" id="first-time-donor" onchange="handleFirstTimeToggle()" class="rounded border-slate-300 text-rose-600 focus:ring-0">
-                  <span>Pehli baar khoon dena chahta/chahti hoon</span>
+                  <span>First time donor</span>
                 </label>
               </div>
               <input type="date" id="last-donation-date" onchange="calculateEligibilityPreview()" class="input-minimal w-full px-3 py-2 rounded-xl">
@@ -201,39 +180,39 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block font-semibold text-slate-600 mb-1">Dastiyaabi (Availability)</label>
+                <label class="block font-semibold text-slate-600 mb-1">Availability</label>
                 <select id="availability" class="input-minimal w-full px-3 py-2 rounded-xl">
-                  <option value="available">Dene ke liye tayyar hoon</option>
-                  <option value="emergency_only">Sirf emergency mein</option>
-                  <option value="unavailable">Abhi dastiyaab nahin</option>
+                  <option value="available">✅ Available — Ready to Donate</option>
+                  <option value="emergency_only">🚨 Emergency Cases Only</option>
+                  <option value="unavailable">⏸ Temporarily Unavailable</option>
                 </select>
               </div>
               <div>
                 <label class="block font-semibold text-slate-600 mb-1">Emergency Call Readiness</label>
                 <select id="emergency_ready" class="input-minimal w-full px-3 py-2 rounded-xl">
-                  <option value="1">24/7 emergency call ke liye tayyar</option>
-                  <option value="0">Sirf din mein call karein</option>
+                  <option value="1">Ready for 24/7 emergency calls</option>
+                  <option value="0">Daytime hours only</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label class="block font-semibold text-slate-600 mb-1">Koi Khaas Baat (Notes — Ikhtiyaari)</label>
-              <input type="text" id="notes" placeholder="Jaise: CMH ke qareeb hoon, Ramazan ke baad dene ke liye tayyar" class="input-minimal w-full px-3 py-2 rounded-xl">
+              <label class="block font-semibold text-slate-600 mb-1">Notes (Optional)</label>
+              <input type="text" id="notes" placeholder="e.g. Near CMH, available after 6pm" class="input-minimal w-full px-3 py-2 rounded-xl">
             </div>
           </div>
         </div>
 
         <!-- Health Checklist -->
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2 text-slate-600">
-          <p class="font-bold text-slate-700 text-[11px] uppercase tracking-wider mb-1.5">Sehat ki Tasdeeq</p>
+          <p class="font-bold text-slate-700 text-[11px] uppercase tracking-wider mb-1.5">Health Confirmation</p>
           <label class="flex items-start gap-2 cursor-pointer">
             <input type="checkbox" required class="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-0">
-            <span>Mera wazn kam az kam 50 kg hai aur main aaj sehatmand mehsoos kar raha/rahi hoon.</span>
+            <span>I weigh at least 50 kg and feel healthy today.</span>
           </label>
           <label class="flex items-start gap-2 cursor-pointer">
             <input type="checkbox" required class="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-0">
-            <span>Main emergency khoon ki zaroorat ke liye rabta kiye jaane par razi hoon.</span>
+            <span>I agree to be contacted for emergency blood donation requests.</span>
           </label>
         </div>
 
@@ -253,13 +232,10 @@
   <!-- SUCCESS MODAL -->
   <div id="success-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4 backdrop-blur-xs">
     <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center border border-slate-200 shadow-xl">
-      <div class="w-12 h-12 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">
-        ✓
-      </div>
-      <h2 class="text-lg font-black text-slate-900 mb-1">Mubarak ho! Successfully Registered</h2>
-      <p class="text-xs text-slate-500 mb-5">Aap ab GCT Lifesavers voluntary blood donor network mein shamil ho gaye hain.</p>
+      <div class="w-12 h-12 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">✓</div>
+      <h2 class="text-lg font-black text-slate-900 mb-1">Registered Successfully!</h2>
+      <p class="text-xs text-slate-500 mb-5">You are now listed in the GCT Lifesavers voluntary blood donor network.</p>
 
-      <!-- Minimal Pass Card -->
       <div class="bg-slate-900 text-white rounded-xl p-4 text-left mb-4 shadow-sm">
         <div class="flex items-center justify-between mb-2">
           <span class="text-[10px] uppercase font-bold text-slate-400">Donor Badge — GCT Lifesavers</span>
@@ -271,10 +247,10 @@
 
       <div class="space-y-2">
         <button onclick="shareFormLink()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition">
-          Registration Link Share Karein
+          Share Registration Link
         </button>
         <a href="/" class="block w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition">
-          Public Directory Dekhein
+          Go to Public Directory
         </a>
       </div>
     </div>
@@ -297,8 +273,7 @@
     }
 
     function syncWhatsapp() {
-      const same = document.getElementById('same-as-phone').checked;
-      if (same) {
+      if (document.getElementById('same-as-phone').checked) {
         document.getElementById('whatsapp').value = document.getElementById('phone').value;
       }
     }
@@ -319,12 +294,11 @@
       const isFirst = document.getElementById('first-time-donor').checked;
       const dateInput = document.getElementById('last-donation-date');
       const box = document.getElementById('eligibility-status-box');
-
       if (isFirst) {
         dateInput.value = '';
         dateInput.disabled = true;
         box.className = 'mt-2 p-2.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
-        box.innerHTML = '✅ <b>Eligible:</b> Pehli baar dene wale foran eligible hain.';
+        box.innerHTML = '✅ <b>Eligible:</b> First-time donors are eligible immediately after initial screening.';
         box.classList.remove('hidden');
       } else {
         dateInput.disabled = false;
@@ -336,27 +310,25 @@
       const dateVal = document.getElementById('last-donation-date').value;
       const box = document.getElementById('eligibility-status-box');
       if (!dateVal) { box.classList.add('hidden'); return; }
-
       const diffDays = Math.floor((Date.now() - new Date(dateVal)) / 86400000);
       const cooldown = 90;
       box.classList.remove('hidden');
       if (diffDays >= cooldown) {
         box.className = 'mt-2 p-2.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
-        box.innerHTML = `✅ <b>Eligible:</b> Akhri baar se ${diffDays} din ho gaye — 90 din poore ho gaye!`;
+        box.innerHTML = `✅ <b>Eligible:</b> ${diffDays} days since last donation — 90-day cooldown complete.`;
       } else {
         box.className = 'mt-2 p-2.5 rounded-xl text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200';
-        box.innerHTML = `⏳ <b>Cooldown mein:</b> Aur <b>${cooldown - diffDays} din</b> baad eligible honge.`;
+        box.innerHTML = `⏳ <b>In Recovery:</b> Eligible again in <b>${cooldown - diffDays} days</b>.`;
       }
     }
 
     async function handleDonorSubmit(e) {
       e.preventDefault();
       if (!selectedBlood) {
-        showToast('Pehle apna blood group chunain', 'error');
+        showToast('Please select your blood group', 'error');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
-
       const isFirstTime = document.getElementById('first-time-donor').checked;
       const payload = {
         name: document.getElementById('name').value,
@@ -379,7 +351,7 @@
 
       const btn = document.getElementById('submit-btn');
       btn.disabled = true;
-      btn.innerHTML = '<span class="text-white">Jama ho raha hai...</span>';
+      btn.innerHTML = '<span class="text-white">Submitting...</span>';
 
       try {
         const res = await fetch('/api/donors', {
@@ -387,11 +359,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
         let data;
-        try { data = await res.json(); } catch {
-          throw new Error(`Server error (${res.status})`);
-        }
+        try { data = await res.json(); } catch { throw new Error(`Server error (${res.status})`); }
 
         if (res.ok && data.success) {
           document.getElementById('pass-name').textContent = payload.name;
@@ -399,7 +368,7 @@
           document.getElementById('pass-location').textContent = `${payload.city}${payload.state ? ', ' + payload.state : ''}`;
           document.getElementById('success-modal').classList.remove('hidden');
         } else {
-          showToast(data.error || 'Registration mein kharaabi', 'error');
+          showToast(data.error || 'Registration failed', 'error');
           btn.disabled = false;
           btn.innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg><span class="text-white font-extrabold text-sm tracking-wide">Register as Blood Donor</span>';
         }
@@ -411,8 +380,7 @@
     }
 
     function shareFormLink() {
-      const url = window.location.href;
-      shareLink('GCT Lifesavers Blood Donor Registration', 'Apna blood group register karein aur Pakistan mein zarooratmand logon ki madad karein.', url);
+      shareLink('GCT Lifesavers Blood Donor Registration', 'Register as a voluntary donor to help save lives.', window.location.href);
     }
   </script>
 </body>
