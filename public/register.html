@@ -349,22 +349,30 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        const data = await res.json();
 
-        if (data.success) {
+        let data;
+        try {
+          data = await res.json();
+        } catch (parseErr) {
+          const text = await res.text().catch(() => '');
+          throw new Error(text || `Server error (${res.status})`);
+        }
+
+        if (res.ok && data.success) {
           document.getElementById('pass-name').textContent = payload.name;
           document.getElementById('pass-blood').textContent = payload.blood_group;
           document.getElementById('pass-location').textContent = `${payload.city}${payload.state ? ', ' + payload.state : ''}`;
           document.getElementById('success-modal').classList.remove('hidden');
         } else {
-          showToast(data.error || 'Failed to submit', 'error');
+          showToast(data.error || 'Failed to submit registration', 'error');
           btn.disabled = false;
-          btn.innerHTML = 'Submit Registration';
+          btn.innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg><span class="text-white font-extrabold text-sm tracking-wide">Register as Blood Donor</span>';
         }
       } catch (err) {
-        showToast('Network error while registering', 'error');
+        console.error('Registration error:', err);
+        showToast(err.message || 'Error while submitting registration', 'error');
         btn.disabled = false;
-        btn.innerHTML = 'Submit Registration';
+        btn.innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg><span class="text-white font-extrabold text-sm tracking-wide">Register as Blood Donor</span>';
       }
     }
 
