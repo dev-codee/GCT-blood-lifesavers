@@ -167,6 +167,22 @@
           </div>
         </div>
 
+        <!-- DONORS PAGINATION -->
+        <div id="admin-pagination" class="hidden flex items-center justify-between gap-2 bg-white border border-slate-200 rounded-xl px-4 py-2.5">
+          <span id="admin-page-info" class="text-[11px] text-slate-400 font-medium"></span>
+          <div class="flex items-center gap-1">
+            <button id="admin-prev-btn" onclick="adminChangePage(adminCurrentPage - 1)"
+              class="px-3 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              ← Prev
+            </button>
+            <div id="admin-page-numbers" class="flex items-center gap-1"></div>
+            <button id="admin-next-btn" onclick="adminChangePage(adminCurrentPage + 1)"
+              class="px-3 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              Next →
+            </button>
+          </div>
+        </div>
+
       </div>
 
       <!-- EMERGENCIES TAB -->
@@ -311,6 +327,8 @@
     let adminToken = localStorage.getItem('life_pulse_admin_token') || '';
     let donorsList = [];
     let debounceAdminTimer = null;
+    const ADMIN_PAGE_SIZE = 20;
+    let adminCurrentPage = 1;
 
     document.addEventListener('DOMContentLoaded', () => {
       if (adminToken) showDashboard();
@@ -424,21 +442,30 @@
         const data = await res.json();
         if (data.success) {
           donorsList = data.donors;
-          renderAdminDonorsTable(donorsList);
+          adminCurrentPage = 1;
+          renderAdminDonorsTable();
         }
       } catch (err) {
         showToast('Failed to load donors', 'error');
       }
     }
 
-    function renderAdminDonorsTable(donors) {
+    function renderAdminDonorsTable() {
       const tbody = document.getElementById('admin-donors-tbody');
-      if (donors.length === 0) {
+      const pagination = document.getElementById('admin-pagination');
+
+      if (donorsList.length === 0) {
         tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400">No donors found</td></tr>`;
+        pagination.classList.add('hidden');
         return;
       }
 
-      tbody.innerHTML = donors.map(d => {
+      const totalPages = Math.ceil(donorsList.length / ADMIN_PAGE_SIZE);
+      const start = (adminCurrentPage - 1) * ADMIN_PAGE_SIZE;
+      const end = Math.min(start + ADMIN_PAGE_SIZE, donorsList.length);
+      const pageDonors = donorsList.slice(start, end);
+
+      tbody.innerHTML = pageDonors.map(d => {
         const statusBadge = d.availability === 'available'
           ? `<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold text-[10px]">Available</span>`
           : (d.availability === 'emergency_only' ? `<span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold text-[10px]">Emergency</span>` : `<span class="bg-slate-100 text-slate-400 px-2 py-0.5 rounded text-[10px]">Unavailable</span>`);
@@ -458,30 +485,55 @@
             </td>
             <td class="py-2.5 px-3">
               <div class="text-slate-800">${escapeHtml(d.city)}</div>
+              ${d.area ? `<div class="text-[10px] text-slate-400">${escapeHtml(d.area)}</div>` : ''}
             </td>
-            <td class="py-2.5 px-3 text-slate-500">
-              ${formatDate(d.last_donation_date)}
-            </td>
-            <td class="py-2.5 px-3">
-              ${statusBadge}
-            </td>
+            <td class="py-2.5 px-3 text-slate-500">${formatDate(d.last_donation_date)}</td>
+            <td class="py-2.5 px-3">${statusBadge}</td>
             <td class="py-2.5 px-3">
               <button onclick="toggleVerify('${d.id}', ${d.is_verified ? 0 : 1})" class="font-bold px-2 py-0.5 rounded text-[10px] transition ${d.is_verified ? 'bg-blue-50 text-blue-700 border border-blue-200' : 'bg-slate-100 text-slate-400'}">
                 ${d.is_verified ? '✓ Verified' : 'Unverified'}
               </button>
             </td>
             <td class="py-2.5 px-3 text-right space-x-1">
-              <button onclick="openEditDonorModal('${d.id}')" class="text-slate-600 hover:text-slate-900 font-semibold px-2 py-0.5 bg-slate-100 rounded hover:bg-slate-200 cursor-pointer">
-                Edit
-              </button>
-              <button onclick="deleteDonor('${d.id}')" class="text-rose-600 hover:text-rose-800 font-semibold px-2 py-0.5 bg-rose-50 rounded hover:bg-rose-100 cursor-pointer">
-                Delete
-              </button>
+              <button onclick="openEditDonorModal('${d.id}')" class="text-slate-600 hover:text-slate-900 font-semibold px-2 py-0.5 bg-slate-100 rounded hover:bg-slate-200 cursor-pointer">Edit</button>
+              <button onclick="deleteDonor('${d.id}')" class="text-rose-600 hover:text-rose-800 font-semibold px-2 py-0.5 bg-rose-50 rounded hover:bg-rose-100 cursor-pointer">Delete</button>
             </td>
           </tr>
         `;
       }).join('');
+
+      // Pagination UI
+      if (totalPages > 1) {
+        pagination.classList.remove('hidden');
+        document.getElementById('admin-page-info').textContent = `${start + 1}–${end} of ${donorsList.length} donors (Page ${adminCurrentPage}/${totalPages})`;
+        document.getElementById('admin-prev-btn').disabled = adminCurrentPage <= 1;
+        document.getElementById('admin-next-btn').disabled = adminCurrentPage >= totalPages;
+
+        const pnContainer = document.getElementById('admin-page-numbers');
+        const pages = [];
+        const range = new Set([1, totalPages, adminCurrentPage, adminCurrentPage - 1, adminCurrentPage + 1].filter(p => p >= 1 && p <= totalPages));
+        [...range].sort((a,b)=>a-b).forEach((page, i, arr) => {
+          if (i > 0 && arr[i] - arr[i-1] > 1) pages.push(`<span class="px-1 text-slate-400 text-xs">…</span>`);
+          if (page === adminCurrentPage) {
+            pages.push(`<button class="w-6 h-6 text-xs font-bold rounded bg-slate-900 text-white">${page}</button>`);
+          } else {
+            pages.push(`<button onclick="adminChangePage(${page})" class="w-6 h-6 text-xs font-semibold rounded border border-slate-200 bg-white text-slate-600 hover:bg-slate-50">${page}</button>`);
+          }
+        });
+        pnContainer.innerHTML = pages.join('');
+      } else {
+        pagination.classList.add('hidden');
+      }
     }
+
+    function adminChangePage(page) {
+      const totalPages = Math.ceil(donorsList.length / ADMIN_PAGE_SIZE);
+      if (page < 1 || page > totalPages) return;
+      adminCurrentPage = page;
+      renderAdminDonorsTable();
+      document.getElementById('admin-donors-tbody').closest('.overflow-x-auto').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
 
     async function toggleVerify(id, newStatus) {
       try {

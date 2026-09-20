@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GCT Lifesavers — Blood Donor Directory</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
@@ -28,11 +27,9 @@
     </div>
   </div>
 
-  <!-- MINIMAL NAVIGATION -->
+  <!-- NAVIGATION -->
   <header class="glass-nav sticky top-0 z-40">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      
-      <!-- Brand -->
       <a href="/" class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-xl bg-rose-600 flex items-center justify-center text-white font-bold text-sm shadow-xs">
           🩸
@@ -43,68 +40,59 @@
         </div>
       </a>
 
-      <!-- Header CTAs -->
       <div class="flex items-center gap-2 sm:gap-3">
         <button onclick="openShareModal()" class="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-300 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
           <span class="hidden sm:inline">Share Link</span>
         </button>
-
         <button onclick="openEmergencyModal()" class="text-xs font-semibold text-rose-600 hover:bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl transition">
-          Post Urgent Need
+          🚨 Post Urgent Need
         </button>
-
         <a href="/register" class="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs px-3.5 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5">
           <span>+ Register as Donor</span>
         </a>
-
         <a href="/admin" title="Admin Portal" class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition ml-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
         </a>
       </div>
-
     </div>
   </header>
 
-  <!-- HERO SECTION -->
+  <!-- HERO -->
   <section class="pt-10 pb-6 px-4 sm:px-6">
     <div class="max-w-4xl mx-auto text-center">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-[11px] font-semibold mb-3">
         <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
-        <span>Connecting Voluntary Donors in Real-Time</span>
+        <span>Pakistan — Voluntary Blood Donor Network</span>
       </div>
       <h1 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
         Blood Donor Directory
       </h1>
       <p class="mt-2 text-xs sm:text-sm text-slate-500 max-w-lg mx-auto">
-        Search registered voluntary donors by blood group and location. Contact them directly with 1-click Call or WhatsApp.
+        Search registered voluntary donors by blood group and city. Contact them directly with 1-click Call or WhatsApp.
       </p>
     </div>
   </section>
 
   <!-- FILTER CONSOLE -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 w-full mb-6">
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 w-full mb-4">
     <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs">
-      
+
       <!-- Blood Group Pills -->
       <div class="mb-4">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Select Blood Group</span>
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Blood Group</span>
           <div class="flex items-center gap-3">
             <label class="inline-flex items-center cursor-pointer text-xs font-medium text-slate-600">
               <input type="checkbox" id="compatibility-toggle" class="rounded border-slate-300 text-slate-900 focus:ring-0" onchange="handleCompatibilityToggle()">
-              <span class="ml-1.5 text-xs text-rose-600 font-semibold">Include Compatible Groups</span>
+              <span class="ml-1.5 text-xs text-rose-600 font-semibold">Include Compatible</span>
             </label>
-            <button onclick="openCompatibilityGuide()" class="text-xs text-slate-400 hover:text-slate-600 underline">
-              Guide
-            </button>
+            <button onclick="openCompatibilityGuide()" class="text-xs text-slate-400 hover:text-slate-600 underline">Guide</button>
           </div>
         </div>
 
         <div class="grid grid-cols-3 sm:grid-cols-9 gap-1.5" id="blood-group-pills">
-          <button onclick="setBloodGroup('ALL')" class="seg-btn active py-2 px-2 text-xs font-bold rounded-xl border border-slate-900 text-center bg-slate-900 text-white" data-group="ALL">
-            All Groups
-          </button>
+          <button onclick="setBloodGroup('ALL')" class="seg-btn active py-2 px-2 text-xs font-bold rounded-xl border border-slate-900 text-center bg-slate-900 text-white" data-group="ALL">All</button>
           <button onclick="setBloodGroup('A+')" class="seg-btn py-2 px-2 text-xs font-bold rounded-xl border border-slate-200 text-center bg-white text-slate-700 hover:border-slate-300" data-group="A+">A+</button>
           <button onclick="setBloodGroup('A-')" class="seg-btn py-2 px-2 text-xs font-bold rounded-xl border border-slate-200 text-center bg-white text-slate-700 hover:border-slate-300" data-group="A-">A-</button>
           <button onclick="setBloodGroup('B+')" class="seg-btn py-2 px-2 text-xs font-bold rounded-xl border border-slate-200 text-center bg-white text-slate-700 hover:border-slate-300" data-group="B+">B+</button>
@@ -114,77 +102,91 @@
           <button onclick="setBloodGroup('O+')" class="seg-btn py-2 px-2 text-xs font-bold rounded-xl border border-slate-200 text-center bg-white text-slate-700 hover:border-slate-300" data-group="O+">O+</button>
           <button onclick="setBloodGroup('O-')" class="seg-btn py-2 px-2 text-xs font-bold rounded-xl border border-slate-200 text-center bg-white text-slate-700 hover:border-slate-300" data-group="O-">O-</button>
         </div>
-
         <div id="compatible-badge-info" class="hidden mt-2 p-2 rounded-xl bg-rose-50 border border-rose-100 text-xs text-rose-800 font-medium"></div>
       </div>
 
-      <!-- Search Inputs Row -->
+      <!-- Filters Row -->
       <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
-        
-        <!-- Keyword Search -->
-        <div class="sm:col-span-5 relative">
-          <input type="text" id="search-input" placeholder="Search by name, area, or phone..." oninput="debouncedFetch()" class="input-minimal w-full pl-8 pr-3 py-2 text-xs rounded-xl">
+        <div class="sm:col-span-4 relative">
+          <input type="text" id="search-input" placeholder="Naam, mohalla, ya phone..." oninput="debouncedFetch()" class="input-minimal w-full pl-8 pr-3 py-2 text-xs rounded-xl">
           <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </div>
-
-        <!-- City Search -->
         <div class="sm:col-span-3 relative">
-          <input type="text" id="city-input" placeholder="Filter by City..." oninput="debouncedFetch()" class="input-minimal w-full pl-8 pr-3 py-2 text-xs rounded-xl">
-          <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <input type="text" id="city-input" placeholder="Shehar ki talash..." oninput="debouncedFetch()" list="pk-cities" class="input-minimal w-full pl-8 pr-3 py-2 text-xs rounded-xl">
+          <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <datalist id="pk-cities">
+            <option value="Karachi"><option value="Lahore"><option value="Islamabad"><option value="Rawalpindi">
+            <option value="Faisalabad"><option value="Multan"><option value="Gujranwala"><option value="Gujrat">
+            <option value="Sialkot"><option value="Peshawar"><option value="Quetta"><option value="Hyderabad">
+            <option value="Sukkur"><option value="Bahawalpur"><option value="Sargodha"><option value="Abbottabad">
+            <option value="Mardan"><option value="Muzaffarabad"><option value="Rahim Yar Khan"><option value="Sahiwal">
+          </datalist>
         </div>
-
-        <!-- Availability Filter -->
-        <div class="sm:col-span-2">
+        <div class="sm:col-span-3">
           <select id="availability-select" onchange="fetchDonors()" class="input-minimal w-full py-2 px-2.5 text-xs rounded-xl font-medium text-slate-700">
-            <option value="ALL">All Status</option>
+            <option value="ALL">Tamam Status</option>
             <option value="available">Available</option>
             <option value="emergency_only">Emergency Only</option>
           </select>
         </div>
-
-        <!-- Eligible Cooldown Filter -->
         <div class="sm:col-span-2 flex items-center">
           <label class="flex items-center gap-2 cursor-pointer select-none bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl w-full hover:bg-slate-100 transition">
             <input type="checkbox" id="eligible-only" onchange="fetchDonors()" class="h-3.5 w-3.5 rounded border-slate-300 text-slate-900 focus:ring-0">
             <span class="text-xs font-semibold text-slate-700">Eligible Now</span>
           </label>
         </div>
-
       </div>
 
     </div>
   </section>
 
-  <!-- DIRECTORY LIST VIEW -->
+  <!-- DIRECTORY -->
   <main class="max-w-5xl mx-auto px-4 sm:px-6 flex-1 w-full pb-12">
-    
+
+    <!-- List Header -->
     <div class="flex items-center justify-between mb-3 px-1">
       <div class="flex items-center gap-2">
-        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Donors Directory (List View)</h2>
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Donors Directory</h2>
         <span id="donor-count-badge" class="bg-slate-100 text-slate-600 text-[11px] font-bold px-2 py-0.5 rounded-full border border-slate-200">0</span>
       </div>
-      <div class="text-[11px] text-slate-400">
-        Direct voluntary donor contacts
+      <div class="flex items-center gap-3 text-[11px] text-slate-400">
+        <span id="page-info-top">Page 1</span>
+        <button onclick="resetFilters()" class="text-slate-400 hover:text-slate-700 underline">Reset Filters</button>
       </div>
     </div>
 
-    <!-- Donors List Container (Clean Stacked List View) -->
-    <div id="donors-list" class="space-y-2.5">
-      <div class="py-12 text-center text-slate-400 text-xs">Loading directory...</div>
+    <!-- Skeleton loader -->
+    <div id="skeleton-loader" class="space-y-2.5">
+      <div class="bg-white rounded-2xl border border-slate-100 p-4 animate-pulse flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-slate-100 flex-shrink-0"></div>
+        <div class="flex-1 space-y-2"><div class="h-3 bg-slate-100 rounded w-1/3"></div><div class="h-2 bg-slate-100 rounded w-1/2"></div></div>
+        <div class="flex gap-2"><div class="h-7 w-16 bg-slate-100 rounded-xl"></div><div class="h-7 w-20 bg-slate-100 rounded-xl"></div></div>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-100 p-4 animate-pulse flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-slate-100 flex-shrink-0"></div>
+        <div class="flex-1 space-y-2"><div class="h-3 bg-slate-100 rounded w-2/5"></div><div class="h-2 bg-slate-100 rounded w-1/3"></div></div>
+        <div class="flex gap-2"><div class="h-7 w-16 bg-slate-100 rounded-xl"></div><div class="h-7 w-20 bg-slate-100 rounded-xl"></div></div>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-100 p-4 animate-pulse flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-slate-100 flex-shrink-0"></div>
+        <div class="flex-1 space-y-2"><div class="h-3 bg-slate-100 rounded w-1/4"></div><div class="h-2 bg-slate-100 rounded w-2/5"></div></div>
+        <div class="flex gap-2"><div class="h-7 w-16 bg-slate-100 rounded-xl"></div><div class="h-7 w-20 bg-slate-100 rounded-xl"></div></div>
+      </div>
     </div>
+
+    <!-- Donors List -->
+    <div id="donors-list" class="space-y-2.5 hidden"></div>
 
     <!-- Empty State -->
     <div id="empty-state" class="hidden bg-white rounded-2xl p-10 text-center border border-slate-200 max-w-md mx-auto my-6 shadow-xs">
-      <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl font-bold">
-        🩸
-      </div>
-      <h3 class="text-sm font-bold text-slate-900 mb-1">No Donors in Directory Yet</h3>
+      <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl font-bold">🩸</div>
+      <h3 class="text-sm font-bold text-slate-900 mb-1">Koi Donor Nahi Mila</h3>
       <p class="text-xs text-slate-500 mb-5 leading-relaxed">
-        Be the first voluntary donor to register, or share the registration link with friends and WhatsApp groups to start collecting contacts.
+        Abhi koi donor registered nahin hai. Pehle donor banein ya apne dosto ko registration link share karein.
       </p>
       <div class="flex flex-col sm:flex-row justify-center gap-2">
         <a href="/register" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5">
-          <span>+ Register as First Donor</span>
+          + Register as First Donor
         </a>
         <button onclick="openShareModal()" class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold transition">
           Share Registration Form
@@ -192,14 +194,32 @@
       </div>
     </div>
 
+    <!-- PAGINATION -->
+    <div id="pagination-container" class="hidden mt-6 flex items-center justify-center gap-1.5">
+      <button id="prev-btn" onclick="changePage(currentPage - 1)"
+        class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center gap-1">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Pichla
+      </button>
+      <div id="page-numbers" class="flex items-center gap-1"></div>
+      <button id="next-btn" onclick="changePage(currentPage + 1)"
+        class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center gap-1">
+        Agla
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Page info bottom -->
+    <div id="page-info-bottom" class="hidden mt-3 text-center text-[11px] text-slate-400"></div>
+
   </main>
 
-  <!-- MINIMAL FOOTER -->
+  <!-- FOOTER -->
   <footer class="border-t border-slate-200 bg-white py-6 mt-auto">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
       <div class="flex items-center gap-1.5">
         <span class="text-rose-600 font-bold">GCT Lifesavers</span>
-        <span>— Open Community Blood Directory</span>
+        <span>— Pakistan Blood Donor Directory</span>
       </div>
       <div class="flex items-center gap-4">
         <a href="/register" class="hover:text-slate-700 transition">Register as Donor</a>
@@ -209,46 +229,34 @@
     </div>
   </footer>
 
-  <!-- ============================================ -->
-  <!-- MODALS -->
-  <!-- ============================================ -->
-
-  <!-- SHARE REGISTRATION MODAL -->
+  <!-- SHARE MODAL -->
   <div id="share-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center p-4 backdrop-blur-xs">
     <div class="bg-white rounded-2xl max-w-sm w-full p-5 border border-slate-200 shadow-xl">
       <div class="flex items-center justify-between mb-3">
         <h3 class="font-bold text-slate-900 text-sm">Share Registration Link</h3>
         <button onclick="closeShareModal()" class="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
       </div>
-
-      <p class="text-xs text-slate-500 mb-3">
-        Invite friends and volunteers to register their blood group.
-      </p>
-
+      <p class="text-xs text-slate-500 mb-3">Dosto ko register karne ke liye link share karein.</p>
       <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col items-center justify-center mb-3">
         <canvas id="share-qr" class="rounded-lg shadow-2xs bg-white"></canvas>
-        <span class="text-[10px] text-slate-400 mt-1.5">Scan to open registration form</span>
+        <span class="text-[10px] text-slate-400 mt-1.5">Scan karein registration form kholne ke liye</span>
       </div>
-
       <div class="flex items-center gap-1.5 mb-3">
         <input type="text" id="share-url-input" readonly class="input-minimal text-xs py-1.5 px-2.5 rounded-lg flex-1 text-slate-600 font-mono select-all">
-        <button onclick="copyShareUrl()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">
-          Copy
-        </button>
+        <button onclick="copyShareUrl()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">Copy</button>
       </div>
-
       <div class="grid grid-cols-2 gap-2">
         <button onclick="shareViaWhatsApp()" class="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg text-xs transition">
-          <span>WhatsApp</span>
+          💬 WhatsApp
         </button>
         <button onclick="nativeShare()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 rounded-lg text-xs transition">
-          <span>More Options</span>
+          More Options
         </button>
       </div>
     </div>
   </div>
 
-  <!-- URGENT BLOOD REQUIREMENT MODAL -->
+  <!-- EMERGENCY MODAL -->
   <div id="emergency-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center p-4 backdrop-blur-xs overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 border border-slate-200 shadow-xl my-6">
       <div class="flex items-center justify-between mb-3">
@@ -258,67 +266,57 @@
         </div>
         <button onclick="closeEmergencyModal()" class="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
       </div>
-
       <form id="emergency-form" onsubmit="submitEmergencyRequest(event)" class="space-y-2.5 text-xs">
         <div>
-          <label class="block font-semibold text-slate-600 mb-1">Patient Name *</label>
-          <input type="text" id="emg-patient" required placeholder="Patient full name" class="input-minimal w-full px-3 py-1.5 rounded-lg">
+          <label class="block font-semibold text-slate-600 mb-1">Patient Ka Naam *</label>
+          <input type="text" id="emg-patient" required placeholder="Jaise: Mohammad Bilal" class="input-minimal w-full px-3 py-1.5 rounded-lg">
         </div>
-
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block font-semibold text-slate-600 mb-1">Blood Group *</label>
             <select id="emg-blood" required class="input-minimal w-full px-2.5 py-1.5 rounded-lg font-bold">
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
+              <option value="A+">A+</option><option value="A-">A-</option>
+              <option value="B+">B+</option><option value="B-">B-</option>
+              <option value="AB+">AB+</option><option value="AB-">AB-</option>
+              <option value="O+">O+</option><option value="O-">O-</option>
             </select>
           </div>
           <div>
-            <label class="block font-semibold text-slate-600 mb-1">Units Needed *</label>
+            <label class="block font-semibold text-slate-600 mb-1">Units Chahiye *</label>
             <input type="number" id="emg-units" value="1" min="1" max="10" required class="input-minimal w-full px-3 py-1.5 rounded-lg">
           </div>
         </div>
-
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block font-semibold text-slate-600 mb-1">Hospital *</label>
-            <input type="text" id="emg-hospital" required placeholder="Hospital name" class="input-minimal w-full px-3 py-1.5 rounded-lg">
+            <input type="text" id="emg-hospital" required placeholder="Jaise: CMH, JPMC, Shaukat Khanum" class="input-minimal w-full px-3 py-1.5 rounded-lg">
           </div>
           <div>
-            <label class="block font-semibold text-slate-600 mb-1">City *</label>
-            <input type="text" id="emg-city" required placeholder="City name" class="input-minimal w-full px-3 py-1.5 rounded-lg">
+            <label class="block font-semibold text-slate-600 mb-1">Shehar *</label>
+            <input type="text" id="emg-city" required placeholder="Jaise: Lahore" list="pk-cities-emg" class="input-minimal w-full px-3 py-1.5 rounded-lg">
+            <datalist id="pk-cities-emg">
+              <option value="Karachi"><option value="Lahore"><option value="Islamabad"><option value="Rawalpindi">
+              <option value="Faisalabad"><option value="Multan"><option value="Peshawar"><option value="Quetta">
+            </datalist>
           </div>
         </div>
-
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block font-semibold text-slate-600 mb-1">Contact Name *</label>
-            <input type="text" id="emg-contact-name" required placeholder="Attendant / Relative" class="input-minimal w-full px-3 py-1.5 rounded-lg">
+            <label class="block font-semibold text-slate-600 mb-1">Attendant Ka Naam *</label>
+            <input type="text" id="emg-contact-name" required placeholder="Relative / Attendant" class="input-minimal w-full px-3 py-1.5 rounded-lg">
           </div>
           <div>
-            <label class="block font-semibold text-slate-600 mb-1">Contact Phone *</label>
-            <input type="tel" id="emg-phone" required placeholder="Phone number" class="input-minimal w-full px-3 py-1.5 rounded-lg">
+            <label class="block font-semibold text-slate-600 mb-1">Contact Number *</label>
+            <input type="tel" id="emg-phone" required placeholder="0300-1234567" class="input-minimal w-full px-3 py-1.5 rounded-lg">
           </div>
         </div>
-
         <div>
-          <label class="block font-semibold text-slate-600 mb-1">Note (Optional)</label>
-          <input type="text" id="emg-notes" placeholder="Room 302, needed before 5 PM..." class="input-minimal w-full px-3 py-1.5 rounded-lg">
+          <label class="block font-semibold text-slate-600 mb-1">Note (Ikhtiyaari)</label>
+          <input type="text" id="emg-notes" placeholder="Room 302, shaam 5 baje se pehle..." class="input-minimal w-full px-3 py-1.5 rounded-lg">
         </div>
-
         <div class="pt-2 flex gap-2">
-          <button type="button" onclick="closeEmergencyModal()" class="w-1/3 py-2 border border-slate-200 text-slate-600 rounded-lg font-semibold hover:bg-slate-50">
-            Cancel
-          </button>
-          <button type="submit" class="w-2/3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-semibold transition">
-            Broadcast Request
-          </button>
+          <button type="button" onclick="closeEmergencyModal()" class="w-1/3 py-2 border border-slate-200 text-slate-600 rounded-lg font-semibold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="w-2/3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-semibold transition">🚨 Broadcast Request</button>
         </div>
       </form>
     </div>
@@ -331,15 +329,10 @@
         <h3 class="font-bold text-slate-900 text-sm">Blood Compatibility Reference</h3>
         <button onclick="closeCompatibilityGuide()" class="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
       </div>
-
       <div class="overflow-x-auto text-xs">
         <table class="w-full text-left border border-slate-200 rounded-xl overflow-hidden">
           <thead class="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
-            <tr>
-              <th class="p-2.5">Blood Type</th>
-              <th class="p-2.5">Can Receive From</th>
-              <th class="p-2.5">Can Give To</th>
-            </tr>
+            <tr><th class="p-2.5">Blood Type</th><th class="p-2.5">Can Receive From</th><th class="p-2.5">Can Give To</th></tr>
           </thead>
           <tbody class="divide-y divide-slate-100 font-medium">
             <tr><td class="p-2.5 font-bold text-rose-600">O- (Universal)</td><td class="p-2.5">O-</td><td class="p-2.5 text-emerald-700 font-bold">Everyone</td></tr>
@@ -353,17 +346,17 @@
           </tbody>
         </table>
       </div>
-
       <div class="mt-4 text-right">
-        <button onclick="closeCompatibilityGuide()" class="px-4 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition">
-          Close
-        </button>
+        <button onclick="closeCompatibilityGuide()" class="px-4 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition">Close</button>
       </div>
     </div>
   </div>
 
   <script src="/app.js"></script>
   <script>
+    const PAGE_SIZE = 15;
+    let currentPage = 1;
+    let allDonors = [];
     let currentBloodGroup = 'ALL';
     let debounceTimer = null;
 
@@ -388,10 +381,9 @@
     function handleCompatibilityToggle() {
       const isChecked = document.getElementById('compatibility-toggle').checked;
       const infoBox = document.getElementById('compatible-badge-info');
-
       if (isChecked && currentBloodGroup !== 'ALL') {
         const compatibleGroups = BLOOD_COMPATIBILITY[currentBloodGroup] || [currentBloodGroup];
-        infoBox.innerHTML = `💡 For a patient needing <b>${currentBloodGroup}</b>, compatible donors include: <b>${compatibleGroups.join(', ')}</b>`;
+        infoBox.innerHTML = `💡 <b>${currentBloodGroup}</b> ko dene wale compatible groups: <b>${compatibleGroups.join(', ')}</b>`;
         infoBox.classList.remove('hidden');
       } else {
         infoBox.classList.add('hidden');
@@ -401,17 +393,24 @@
 
     function debouncedFetch() {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(fetchDonors, 300);
+      debounceTimer = setTimeout(fetchDonors, 350);
     }
 
     async function fetchDonors() {
       const list = document.getElementById('donors-list');
+      const skeleton = document.getElementById('skeleton-loader');
       const emptyState = document.getElementById('empty-state');
       const search = document.getElementById('search-input').value.trim();
       const city = document.getElementById('city-input').value.trim();
       const availability = document.getElementById('availability-select').value;
       const eligibleOnly = document.getElementById('eligible-only').checked;
       const compatibilityChecked = document.getElementById('compatibility-toggle').checked;
+
+      skeleton.classList.remove('hidden');
+      list.classList.add('hidden');
+      emptyState.classList.add('hidden');
+      document.getElementById('pagination-container').classList.add('hidden');
+      document.getElementById('page-info-bottom').classList.add('hidden');
 
       let bloodParam = currentBloodGroup;
       if (compatibilityChecked && currentBloodGroup !== 'ALL') {
@@ -420,9 +419,9 @@
       }
 
       const params = new URLSearchParams();
-      if (bloodParam) params.append('blood_group', bloodParam);
+      if (bloodParam && bloodParam !== 'ALL') params.append('blood_group', bloodParam);
       if (city) params.append('city', city);
-      if (availability) params.append('availability', availability);
+      if (availability && availability !== 'ALL') params.append('availability', availability);
       if (search) params.append('search', search);
       if (eligibleOnly) params.append('eligible_only', '1');
 
@@ -430,27 +429,100 @@
         const res = await fetch(`/api/donors?${params.toString()}`);
         const data = await res.json();
 
+        skeleton.classList.add('hidden');
+        list.classList.remove('hidden');
+
         if (data.success) {
+          allDonors = data.donors;
+          currentPage = 1;
           document.getElementById('donor-count-badge').textContent = data.count;
-
-          if (data.donors.length === 0) {
-            list.innerHTML = '';
-            emptyState.classList.remove('hidden');
-            return;
-          }
-
-          emptyState.classList.add('hidden');
-          list.innerHTML = data.donors.map(donor => renderDonorRow(donor)).join('');
+          renderPage();
         }
       } catch (err) {
-        console.error('Error fetching donors:', err);
+        skeleton.classList.add('hidden');
+        list.classList.remove('hidden');
+        list.innerHTML = '<div class="py-8 text-center text-xs text-red-500">Error loading donors. Please refresh.</div>';
+        console.error('Error:', err);
       }
     }
 
-    // Modern Minimal List View Row
+    function renderPage() {
+      const list = document.getElementById('donors-list');
+      const emptyState = document.getElementById('empty-state');
+      const paginationContainer = document.getElementById('pagination-container');
+      const totalPages = Math.ceil(allDonors.length / PAGE_SIZE);
+
+      if (allDonors.length === 0) {
+        list.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        paginationContainer.classList.add('hidden');
+        document.getElementById('page-info-bottom').classList.add('hidden');
+        document.getElementById('page-info-top').textContent = 'Koi result nahin';
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = Math.min(start + PAGE_SIZE, allDonors.length);
+      const pageDonors = allDonors.slice(start, end);
+
+      list.innerHTML = pageDonors.map(renderDonorRow).join('');
+
+      // Update page info
+      const pageInfoText = `${start + 1}–${end} of ${allDonors.length} donors`;
+      document.getElementById('page-info-top').textContent = `Page ${currentPage} of ${totalPages}`;
+
+      // Pagination controls
+      if (totalPages > 1) {
+        paginationContainer.classList.remove('hidden');
+        document.getElementById('page-info-bottom').classList.remove('hidden');
+        document.getElementById('page-info-bottom').textContent = pageInfoText;
+        document.getElementById('prev-btn').disabled = currentPage <= 1;
+        document.getElementById('next-btn').disabled = currentPage >= totalPages;
+        renderPageNumbers(totalPages);
+      } else {
+        paginationContainer.classList.add('hidden');
+        document.getElementById('page-info-top').textContent = `${allDonors.length} donors`;
+        document.getElementById('page-info-bottom').classList.add('hidden');
+      }
+
+      // Scroll to top of list on page change
+      list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderPageNumbers(totalPages) {
+      const container = document.getElementById('page-numbers');
+      const pages = [];
+
+      // Always show first, last, current ± 1, and ellipsis
+      const range = new Set([1, totalPages, currentPage, currentPage - 1, currentPage + 1].filter(p => p >= 1 && p <= totalPages));
+      const sorted = [...range].sort((a, b) => a - b);
+
+      sorted.forEach((page, i) => {
+        if (i > 0 && sorted[i] - sorted[i - 1] > 1) {
+          pages.push(`<span class="px-1.5 text-slate-400 text-xs">…</span>`);
+        }
+        if (page === currentPage) {
+          pages.push(`<button class="w-7 h-7 text-xs font-bold rounded-lg bg-slate-900 text-white">${page}</button>`);
+        } else {
+          pages.push(`<button onclick="changePage(${page})" class="w-7 h-7 text-xs font-semibold rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition">${page}</button>`);
+        }
+      });
+
+      container.innerHTML = pages.join('');
+    }
+
+    function changePage(page) {
+      const totalPages = Math.ceil(allDonors.length / PAGE_SIZE);
+      if (page < 1 || page > totalPages) return;
+      currentPage = page;
+      renderPage();
+    }
+
     function renderDonorRow(d) {
       const isEligible = d.eligibility.isEligible;
-      const eligibilityBadge = isEligible 
+      const eligibilityBadge = isEligible
         ? `<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ${d.eligibility.statusText}
            </span>`
@@ -458,49 +530,39 @@
              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> ${d.eligibility.statusText}
            </span>`;
 
-      const verifiedBadge = d.is_verified 
-        ? `<span class="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100" title="Verified voluntary donor">✓ Verified</span>`
-        : '';
+      const verifiedBadge = d.is_verified
+        ? `<span class="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">✓ Verified</span>` : '';
 
       const availabilityBadge = d.availability === 'available'
         ? `<span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Available</span>`
-        : (d.availability === 'emergency_only' 
-            ? `<span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100">Emergency Only</span>` 
-            : `<span class="text-[10px] font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Unavailable</span>`);
+        : (d.availability === 'emergency_only'
+          ? `<span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100">Emergency Only</span>`
+          : `<span class="text-[10px] font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Unavailable</span>`);
 
       const areaText = d.area ? `${d.area}, ` : '';
       const locationText = `${areaText}${d.city}${d.state ? ', ' + d.state : ''}`;
 
       return `
         <div class="minimal-card rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition">
-          
-          <!-- Left side: Blood Badge + Donor Details -->
           <div class="flex items-center gap-3.5 min-w-0">
-            <!-- Blood Group Badge -->
             <div class="blood-badge w-12 h-12 flex-shrink-0 bg-rose-50 text-rose-600 border border-rose-200/80 text-base font-black flex items-center justify-center">
               ${d.blood_group}
             </div>
-
-            <!-- Details -->
             <div class="min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <h3 class="font-bold text-slate-900 text-sm truncate">${escapeHtml(d.name)}</h3>
                 ${verifiedBadge}
                 ${availabilityBadge}
               </div>
-
               <div class="flex items-center gap-2 text-[11px] text-slate-400 mt-1 flex-wrap">
                 <span class="text-slate-600 font-medium">📍 ${escapeHtml(locationText)}</span>
                 <span>•</span>
                 <span>${eligibilityBadge}</span>
                 ${d.age ? `<span>•</span><span>${d.age} yrs</span>` : ''}
               </div>
-
               ${d.notes ? `<div class="text-[11px] text-slate-500 italic mt-1 line-clamp-1">"${escapeHtml(d.notes)}"</div>` : ''}
             </div>
           </div>
-
-          <!-- Right side: Quick Action Buttons -->
           <div class="flex items-center gap-2 flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
             <a href="tel:${escapeHtml(d.phone)}" class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-1.5 px-3.5 rounded-xl text-xs transition">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
@@ -511,7 +573,6 @@
               <span>WhatsApp</span>
             </button>
           </div>
-
         </div>
       `;
     }
@@ -523,15 +584,13 @@
         if (data.success && data.requests.length > 0) {
           const req = data.requests[0];
           document.getElementById('emergency-banner').classList.remove('hidden');
-          document.getElementById('emergency-banner-text').textContent = 
-            `Urgent: ${req.units} unit(s) of ${req.blood_group} needed for ${req.patient_name} at ${req.hospital_name}, ${req.city}`;
+          document.getElementById('emergency-banner-text').textContent =
+            `Urgent: ${req.units} unit(s) ${req.blood_group} needed — ${req.patient_name} at ${req.hospital_name}, ${req.city}`;
           document.getElementById('emergency-banner-call').href = `tel:${req.contact_phone}`;
         } else {
           document.getElementById('emergency-banner').classList.add('hidden');
         }
-      } catch (err) {
-        console.error('Failed to load emergency alerts:', err);
-      }
+      } catch (err) {}
     }
 
     function resetFilters() {
@@ -540,17 +599,13 @@
       document.getElementById('availability-select').value = 'ALL';
       document.getElementById('eligible-only').checked = false;
       document.getElementById('compatibility-toggle').checked = false;
+      document.getElementById('compatible-badge-info').classList.add('hidden');
       setBloodGroup('ALL');
     }
 
     function escapeHtml(str) {
       if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
     }
 
     function openShareModal() {
@@ -559,42 +614,17 @@
       renderQRCode('share-qr', regUrl);
       document.getElementById('share-modal').classList.remove('hidden');
     }
-
-    function closeShareModal() {
-      document.getElementById('share-modal').classList.add('hidden');
-    }
-
-    function copyShareUrl() {
-      const url = document.getElementById('share-url-input').value;
-      copyToClipboard(url, 'Link copied!');
-    }
-
+    function closeShareModal() { document.getElementById('share-modal').classList.add('hidden'); }
+    function copyShareUrl() { copyToClipboard(document.getElementById('share-url-input').value, 'Link copied!'); }
     function shareViaWhatsApp() {
-      const regUrl = window.location.origin + '/register';
-      const text = `🩸 Join our Blood Donor Directory to help save lives during emergencies: ${regUrl}`;
+      const text = `🩸 GCT Lifesavers — Blood Donor Registration: ${window.location.origin + '/register'}`;
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
-
-    function nativeShare() {
-      const regUrl = window.location.origin + '/register';
-      shareLink('GCT Lifesavers Blood Donor Directory', 'Register as voluntary donor to save lives.', regUrl);
-    }
-
-    function openEmergencyModal() {
-      document.getElementById('emergency-modal').classList.remove('hidden');
-    }
-
-    function closeEmergencyModal() {
-      document.getElementById('emergency-modal').classList.add('hidden');
-    }
-
-    function openCompatibilityGuide() {
-      document.getElementById('compatibility-modal').classList.remove('hidden');
-    }
-
-    function closeCompatibilityGuide() {
-      document.getElementById('compatibility-modal').classList.add('hidden');
-    }
+    function nativeShare() { shareLink('GCT Lifesavers', 'Blood Donor Directory', window.location.origin + '/register'); }
+    function openEmergencyModal() { document.getElementById('emergency-modal').classList.remove('hidden'); }
+    function closeEmergencyModal() { document.getElementById('emergency-modal').classList.add('hidden'); }
+    function openCompatibilityGuide() { document.getElementById('compatibility-modal').classList.remove('hidden'); }
+    function closeCompatibilityGuide() { document.getElementById('compatibility-modal').classList.add('hidden'); }
 
     async function submitEmergencyRequest(e) {
       e.preventDefault();
@@ -608,7 +638,6 @@
         contact_phone: document.getElementById('emg-phone').value,
         notes: document.getElementById('emg-notes').value
       };
-
       try {
         const res = await fetch('/api/emergency-requests', {
           method: 'POST',
@@ -625,7 +654,7 @@
           showToast(data.error || 'Failed to post request', 'error');
         }
       } catch (err) {
-        showToast('Network error while posting', 'error');
+        showToast('Network error', 'error');
       }
     }
   </script>
