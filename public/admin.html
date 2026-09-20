@@ -466,15 +466,15 @@
               ${statusBadge}
             </td>
             <td class="py-2.5 px-3">
-              <button onclick="toggleVerify(${d.id}, ${d.is_verified ? 0 : 1})" class="font-bold px-2 py-0.5 rounded text-[10px] transition ${d.is_verified ? 'bg-blue-50 text-blue-700 border border-blue-200' : 'bg-slate-100 text-slate-400'}">
+              <button onclick="toggleVerify('${d.id}', ${d.is_verified ? 0 : 1})" class="font-bold px-2 py-0.5 rounded text-[10px] transition ${d.is_verified ? 'bg-blue-50 text-blue-700 border border-blue-200' : 'bg-slate-100 text-slate-400'}">
                 ${d.is_verified ? '✓ Verified' : 'Unverified'}
               </button>
             </td>
             <td class="py-2.5 px-3 text-right space-x-1">
-              <button onclick="openEditDonorModal(${d.id})" class="text-slate-600 hover:text-slate-900 font-semibold px-2 py-0.5 bg-slate-100 rounded">
+              <button onclick="openEditDonorModal('${d.id}')" class="text-slate-600 hover:text-slate-900 font-semibold px-2 py-0.5 bg-slate-100 rounded hover:bg-slate-200 cursor-pointer">
                 Edit
               </button>
-              <button onclick="deleteDonor(${d.id})" class="text-rose-600 hover:text-rose-800 font-semibold px-2 py-0.5 bg-rose-50 rounded">
+              <button onclick="deleteDonor('${d.id}')" class="text-rose-600 hover:text-rose-800 font-semibold px-2 py-0.5 bg-rose-50 rounded hover:bg-rose-100 cursor-pointer">
                 Delete
               </button>
             </td>
@@ -485,21 +485,21 @@
 
     async function toggleVerify(id, newStatus) {
       try {
-        const res = await fetch(`/api/donors/${id}/verify`, {
+        const res = await fetch(`/api/donors?id=${encodeURIComponent(id)}&action=verify`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${adminToken}`
           },
-          body: JSON.stringify({ is_verified: newStatus })
+          body: JSON.stringify({ id, is_verified: newStatus })
         });
         const data = await res.json();
         if (data.success) {
-          showToast('Updated', 'success');
+          showToast('Verification status updated', 'success');
           fetchAdminDonors();
           fetchDashboardStats();
         } else {
-          showToast(data.error || 'Failed', 'error');
+          showToast(data.error || 'Failed to update', 'error');
         }
       } catch (err) {
         showToast('Error updating status', 'error');
@@ -507,15 +507,19 @@
     }
 
     async function deleteDonor(id) {
-      if (!confirm('Delete this donor record?')) return;
+      if (!confirm('Are you sure you want to permanently delete this donor record?')) return;
       try {
-        const res = await fetch(`/api/donors/${id}`, {
+        const res = await fetch(`/api/donors?id=${encodeURIComponent(id)}`, {
           method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${adminToken}` }
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${adminToken}`
+          },
+          body: JSON.stringify({ id })
         });
         const data = await res.json();
         if (data.success) {
-          showToast('Donor deleted', 'success');
+          showToast('Donor deleted successfully', 'success');
           fetchAdminDonors();
           fetchDashboardStats();
         } else {
@@ -534,8 +538,11 @@
     }
 
     function openEditDonorModal(id) {
-      const donor = donorsList.find(d => d.id === id);
-      if (!donor) return;
+      const donor = donorsList.find(d => String(d.id) === String(id));
+      if (!donor) {
+        showToast('Donor details not found', 'error');
+        return;
+      }
 
       document.getElementById('donor-modal-title').textContent = 'Edit Donor';
       document.getElementById('edit-donor-id').value = donor.id;
@@ -549,7 +556,7 @@
       document.getElementById('edit-availability').value = donor.availability || 'available';
       document.getElementById('edit-last-date').value = donor.last_donation_date || '';
       document.getElementById('edit-notes').value = donor.notes || '';
-      document.getElementById('edit-verified').checked = donor.is_verified === 1;
+      document.getElementById('edit-verified').checked = !!donor.is_verified;
 
       document.getElementById('donor-modal').classList.remove('hidden');
     }
@@ -577,7 +584,11 @@
         is_verified: document.getElementById('edit-verified').checked ? 1 : 0
       };
 
-      const url = isNew ? '/api/donors' : `/api/donors/${id}`;
+      if (!isNew) {
+        payload.id = id;
+      }
+
+      const url = isNew ? '/api/donors' : `/api/donors?id=${encodeURIComponent(id)}`;
       const method = isNew ? 'POST' : 'PUT';
 
       try {
@@ -591,7 +602,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          showToast(isNew ? 'Donor added' : 'Donor updated', 'success');
+          showToast(isNew ? 'Donor added successfully' : 'Donor updated successfully', 'success');
           closeDonorModal();
           fetchAdminDonors();
           fetchDashboardStats();
@@ -623,8 +634,8 @@
               <td class="py-2.5 px-3"><a href="tel:${escapeHtml(r.contact_phone)}" class="text-slate-800 font-semibold">${escapeHtml(r.contact_phone)}</a></td>
               <td class="py-2.5 px-3"><span class="bg-amber-50 text-amber-800 px-2 py-0.5 rounded text-[10px] font-bold">${r.status}</span></td>
               <td class="py-2.5 px-3 text-right space-x-1">
-                <button onclick="resolveEmergency(${r.id})" class="text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded font-semibold text-[10px]">Mark Done</button>
-                <button onclick="deleteEmergency(${r.id})" class="text-rose-700 bg-rose-50 hover:bg-rose-100 px-2 py-0.5 rounded font-semibold text-[10px]">Delete</button>
+                <button onclick="resolveEmergency('${r.id}')" class="text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded font-semibold text-[10px]">Mark Done</button>
+                <button onclick="deleteEmergency('${r.id}')" class="text-rose-700 bg-rose-50 hover:bg-rose-100 px-2 py-0.5 rounded font-semibold text-[10px]">Delete</button>
               </td>
             </tr>
           `).join('');
@@ -636,13 +647,13 @@
 
     async function resolveEmergency(id) {
       try {
-        const res = await fetch(`/api/emergency-requests/${id}/status`, {
+        const res = await fetch(`/api/emergency-requests?id=${encodeURIComponent(id)}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${adminToken}`
           },
-          body: JSON.stringify({ status: 'fulfilled' })
+          body: JSON.stringify({ id, status: 'fulfilled' })
         });
         const data = await res.json();
         if (data.success) {
@@ -658,9 +669,13 @@
     async function deleteEmergency(id) {
       if (!confirm('Delete this emergency request?')) return;
       try {
-        const res = await fetch(`/api/emergency-requests/${id}`, {
+        const res = await fetch(`/api/emergency-requests?id=${encodeURIComponent(id)}`, {
           method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${adminToken}` }
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${adminToken}`
+          },
+          body: JSON.stringify({ id })
         });
         const data = await res.json();
         if (data.success) {

@@ -8,7 +8,7 @@ const db = require('./lib/db');
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
 
-// In-memory active tokens
+// In-memory active tokens (local dev session)
 const activeAdminTokens = new Set();
 
 function sendJson(res, statusCode, data) {
@@ -85,82 +85,99 @@ const server = http.createServer(async (req, res) => {
   }
 
   try {
-    // API ROUTES
-    if (pathname === '/api/donors' && method === 'GET') {
-      const donors = await db.getDonors(parsedUrl.query);
-      return sendJson(res, 200, { success: true, count: donors.length, donors });
-    }
-
-    if (pathname === '/api/donors' && method === 'POST') {
-      const body = await parseJsonBody(req);
-      if (!body.name || !body.blood_group || !body.phone || !body.city) {
-        return sendJson(res, 400, { success: false, error: 'Name, Blood Group, Phone, and City are mandatory.' });
+    // ---- DONORS ----
+    if (pathname === '/api/donors') {
+      if (method === 'GET') {
+        const donors = await db.getDonors(parsedUrl.query);
+        return sendJson(res, 200, { success: true, count: donors.length, donors });
       }
-      const donorId = await db.createDonor(body);
-      return sendJson(res, 201, { success: true, message: 'Donor registered successfully!', donorId });
-    }
 
-    const donorMatch = pathname.match(/^\/api\/donors\/([a-zA-Z0-9_-]+)$/);
-    if (donorMatch && method === 'PUT') {
-      if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
-      const id = donorMatch[1];
-      const body = await parseJsonBody(req);
-      await db.updateDonor(id, body);
-      return sendJson(res, 200, { success: true, message: 'Donor updated.' });
-    }
-
-    const verifyMatch = pathname.match(/^\/api\/donors\/([a-zA-Z0-9_-]+)\/verify$/);
-    if (verifyMatch && method === 'PATCH') {
-      if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
-      const id = verifyMatch[1];
-      const body = await parseJsonBody(req);
-      await db.toggleVerifyDonor(id, body.is_verified);
-      return sendJson(res, 200, { success: true, message: 'Verification updated.' });
-    }
-
-    if (donorMatch && method === 'DELETE') {
-      if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
-      const id = donorMatch[1];
-      await db.deleteDonor(id);
-      return sendJson(res, 200, { success: true, message: 'Donor deleted.' });
-    }
-
-    if (pathname === '/api/emergency-requests' && method === 'GET') {
-      const requests = await db.getEmergencyRequests(parsedUrl.query.status || 'open');
-      return sendJson(res, 200, { success: true, requests });
-    }
-
-    if (pathname === '/api/emergency-requests' && method === 'POST') {
-      const body = await parseJsonBody(req);
-      if (!body.patient_name || !body.blood_group || !body.hospital_name || !body.city || !body.contact_phone) {
-        return sendJson(res, 400, { success: false, error: 'Required fields missing.' });
+      if (method === 'POST') {
+        const body = await parseJsonBody(req);
+        if (!body.name || !body.blood_group || !body.phone || !body.city) {
+          return sendJson(res, 400, { success: false, error: 'Name, Blood Group, Phone, and City are required.' });
+        }
+        const donorId = await db.createDonor(body);
+        return sendJson(res, 201, { success: true, message: 'Donor registered successfully!', donorId });
       }
-      const requestId = await db.createEmergencyRequest(body);
-      return sendJson(res, 201, { success: true, message: 'Request broadcasted.', requestId });
+
+      // PUT /api/donors?id=...  (edit donor)
+      if (method === 'PUT') {
+        if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
+        const id = parsedUrl.query.id;
+        if (!id) return sendJson(res, 400, { success: false, error: 'Missing id' });
+        const body = await parseJsonBody(req);
+        await db.updateDonor(id, body);
+        return sendJson(res, 200, { success: true, message: 'Donor updated.' });
+      }
+
+      // PATCH /api/donors?id=...  (toggle verify)
+      if (method === 'PATCH') {
+        if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
+        const id = parsedUrl.query.id;
+        if (!id) return sendJson(res, 400, { success: false, error: 'Missing id' });
+        const body = await parseJsonBody(req);
+        await db.toggleVerifyDonor(id, body.is_verified);
+        return sendJson(res, 200, { success: true, message: 'Verification status updated.' });
+      }
+
+      // DELETE /api/donors?id=...
+      if (method === 'DELETE') {
+        if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
+        const id = parsedUrl.query.id;
+        if (!id) return sendJson(res, 400, { success: false, error: 'Missing id' });
+        await db.deleteDonor(id);
+        return sendJson(res, 200, { success: true, message: 'Donor deleted.' });
+      }
+
+      return sendJson(res, 405, { success: false, error: 'Method not allowed' });
     }
 
-    const emgStatusMatch = pathname.match(/^\/api\/emergency-requests\/([a-zA-Z0-9_-]+)\/status$/);
-    if (emgStatusMatch && method === 'PATCH') {
-      if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
-      const id = emgStatusMatch[1];
-      const body = await parseJsonBody(req);
-      await db.updateEmergencyStatus(id, body.status || 'fulfilled');
-      return sendJson(res, 200, { success: true, message: 'Status updated.' });
+    // ---- EMERGENCY REQUESTS ----
+    if (pathname === '/api/emergency-requests') {
+      if (method === 'GET') {
+        const requests = await db.getEmergencyRequests(parsedUrl.query.status || 'open');
+        return sendJson(res, 200, { success: true, requests });
+      }
+
+      if (method === 'POST') {
+        const body = await parseJsonBody(req);
+        if (!body.patient_name || !body.blood_group || !body.hospital_name || !body.city || !body.contact_phone) {
+          return sendJson(res, 400, { success: false, error: 'Required fields missing.' });
+        }
+        const requestId = await db.createEmergencyRequest(body);
+        return sendJson(res, 201, { success: true, message: 'Request broadcasted.', requestId });
+      }
+
+      // PATCH /api/emergency-requests?id=...  (resolve)
+      if (method === 'PATCH') {
+        if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
+        const id = parsedUrl.query.id;
+        if (!id) return sendJson(res, 400, { success: false, error: 'Missing id' });
+        const body = await parseJsonBody(req);
+        await db.updateEmergencyStatus(id, body.status || 'fulfilled');
+        return sendJson(res, 200, { success: true, message: 'Status updated.' });
+      }
+
+      // DELETE /api/emergency-requests?id=...
+      if (method === 'DELETE') {
+        if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
+        const id = parsedUrl.query.id;
+        if (!id) return sendJson(res, 400, { success: false, error: 'Missing id' });
+        await db.deleteEmergencyRequest(id);
+        return sendJson(res, 200, { success: true, message: 'Deleted.' });
+      }
+
+      return sendJson(res, 405, { success: false, error: 'Method not allowed' });
     }
 
-    const emgDelMatch = pathname.match(/^\/api\/emergency-requests\/([a-zA-Z0-9_-]+)$/);
-    if (emgDelMatch && method === 'DELETE') {
-      if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
-      const id = emgDelMatch[1];
-      await db.deleteEmergencyRequest(id);
-      return sendJson(res, 200, { success: true, message: 'Deleted.' });
-    }
-
+    // ---- STATS ----
     if (pathname === '/api/stats' && method === 'GET') {
       const stats = await db.getStats();
       return sendJson(res, 200, { success: true, stats });
     }
 
+    // ---- ADMIN AUTH ----
     if (pathname === '/api/admin/login' && method === 'POST') {
       const body = await parseJsonBody(req);
       const isValid = await db.verifyAdminPassword(body.password || '');
@@ -187,7 +204,9 @@ const server = http.createServer(async (req, res) => {
       if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
       const donors = await db.getDonors();
       const headers = ['ID', 'Name', 'Blood Group', 'Phone', 'WhatsApp', 'Email', 'City', 'Area', 'Availability', 'Verified'];
-      const csv = [headers.join(',')].concat(donors.map(d => [d.id, `"${d.name}"`, d.blood_group, `"${d.phone}"`, `"${d.whatsapp || ''}"`, `"${d.email || ''}"`, `"${d.city}"`, `"${d.area || ''}"`, d.availability, d.is_verified ? 'Yes' : 'No'].join(','))).join('\r\n');
+      const csv = [headers.join(',')].concat(donors.map(d =>
+        [d.id, `"${d.name}"`, d.blood_group, `"${d.phone}"`, `"${d.whatsapp || ''}"`, `"${d.email || ''}"`, `"${d.city}"`, `"${d.area || ''}"`, d.availability, d.is_verified ? 'Yes' : 'No'].join(',')
+      )).join('\r\n');
       res.writeHead(200, {
         'Content-Type': 'text/csv; charset=utf-8',
         'Content-Disposition': 'attachment; filename="blood_donors.csv"'
@@ -195,12 +214,12 @@ const server = http.createServer(async (req, res) => {
       return res.end(csv);
     }
 
-    // STATIC FILES
+    // ---- STATIC FILES ----
     if (pathname === '/' || pathname === '/donors') return serveFile(res, path.join(PUBLIC_DIR, 'index.html'));
     if (pathname === '/register' || pathname === '/join') return serveFile(res, path.join(PUBLIC_DIR, 'register.html'));
     if (pathname === '/admin') return serveFile(res, path.join(PUBLIC_DIR, 'admin.html'));
 
-    const safeSuffix = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
+    const safeSuffix = path.normalize(pathname).replace(/^(\.\.[\\/])+/, '');
     const candidatePath = path.join(PUBLIC_DIR, safeSuffix);
     if (fs.existsSync(candidatePath) && fs.statSync(candidatePath).isFile()) {
       return serveFile(res, candidatePath);
@@ -215,10 +234,6 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`🩸 GCT Lifesavers is live on http://localhost:${PORT}/`);
-  if (process.env.MONGODB_URI) {
-    console.log(`🍃 Connected to MongoDB Atlas!`);
-  } else {
-    console.log(`ℹ️  Running with local SQLite/storage. Set MONGODB_URI to use MongoDB Atlas.`);
-  }
+  console.log(`🩸 GCT Lifesavers is live at http://localhost:${PORT}/`);
+  console.log(`🍃 Using MongoDB Atlas (MONGODB_URI=${process.env.MONGODB_URI ? 'set' : 'NOT SET'})`);
 });
