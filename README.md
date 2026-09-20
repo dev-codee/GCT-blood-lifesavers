@@ -1,4 +1,4 @@
-# 🩸 LifePulse — Blood Donor Directory & Community Network
+# 🩸 GCT Lifesavers — Blood Donor Directory & Community Network
 
 A clean, modern, and minimal platform to connect voluntary blood donors with patients and hospitals in real-time.
 
@@ -37,7 +37,7 @@ This repository is pre-configured with `vercel.json` and serverless API handlers
    ```bash
    git init
    git add .
-   git commit -m "Initial commit of LifePulse Blood Donor Directory"
+   git commit -m "Initial commit of GCT Lifesavers Blood Donor Directory"
    git branch -M main
    git remote add origin https://github.com/YOUR_USERNAME/blood-donor-directory.git
    git push -u origin main

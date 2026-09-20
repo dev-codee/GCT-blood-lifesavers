@@ -1,5 +1,5 @@
 @echo off
-title Push to GitHub - LifePulse
+title Push to GitHub - GCT Lifesavers
 echo ========================================================
 echo   Pushing code to https://github.com/dev-codee/GCT-blood-lifesavers.git
 echo ========================================================

@@ -215,7 +215,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`🩸 LifePulse is live on http://localhost:${PORT}/`);
+  console.log(`🩸 GCT Lifesavers is live on http://localhost:${PORT}/`);
   if (process.env.MONGODB_URI) {
     console.log(`🍃 Connected to MongoDB Atlas!`);
   } else {
