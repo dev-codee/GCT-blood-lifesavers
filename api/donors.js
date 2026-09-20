@@ -1,4 +1,5 @@
 const url = require('node:url');
+const crypto = require('node:crypto');
 const db = require('../lib/db');
 
 function sendJson(res, statusCode, data) {
@@ -23,11 +24,23 @@ function parseJsonBody(req) {
   });
 }
 
+const TOKEN_SECRET = process.env.ADMIN_TOKEN_SECRET || process.env.ADMIN_PASSWORD || 'changeme';
+
+function verifyToken(token) {
+  if (!token || !token.includes('.')) return false;
+  const [rand, sig] = token.split('.');
+  const expected = crypto.createHmac('sha256', TOKEN_SECRET).update(rand).digest('hex');
+  try {
+    return crypto.timingSafeEqual(Buffer.from(sig, 'hex'), Buffer.from(expected, 'hex'));
+  } catch { return false; }
+}
+
 function isAuthorized(req) {
-  const authHeader = req.headers['authorization'] || '';
-  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  const cookies = req.headers['cookie'] || '';
-  return !!(token || cookies.includes('admin_token='));
+  const token = (req.headers['authorization'] || '').replace(/^Bearer\s+/i, '').trim();
+  if (token && verifyToken(token)) return true;
+  const cookieMatch = (req.headers['cookie'] || '').match(/admin_token=([a-f0-9.]+)/);
+  if (cookieMatch && verifyToken(cookieMatch[1])) return true;
+  return false;
 }
 
 module.exports = async (req, res) => {

@@ -180,24 +180,32 @@ const server = http.createServer(async (req, res) => {
     // ---- ADMIN AUTH ----
     if (pathname === '/api/admin/login' && method === 'POST') {
       const body = await parseJsonBody(req);
-      const isValid = await db.verifyAdminPassword(body.password || '');
+      let isValid = false;
+      try {
+        isValid = db.verifyAdminCredentials(body.username || '', body.password || '');
+      } catch (e) {
+        return sendJson(res, 500, { success: false, error: e.message });
+      }
       if (isValid) {
-        const token = crypto.randomBytes(24).toString('hex');
+        const token = crypto.randomBytes(32).toString('hex');
         activeAdminTokens.add(token);
+        // Auto-expire token after 8 hours
+        setTimeout(() => activeAdminTokens.delete(token), 8 * 60 * 60 * 1000);
         res.writeHead(200, {
           'Content-Type': 'application/json',
-          'Set-Cookie': `admin_token=${token}; Path=/; HttpOnly; SameSite=Lax`
+          'Set-Cookie': `admin_token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=28800`
         });
         return res.end(JSON.stringify({ success: true, token }));
       }
-      return sendJson(res, 401, { success: false, error: 'Invalid password' });
+      return sendJson(res, 401, { success: false, error: 'Invalid credentials' });
     }
 
-    if (pathname === '/api/admin/change-password' && method === 'POST') {
-      if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
-      const body = await parseJsonBody(req);
-      await db.changeAdminPassword(body.newPassword || '');
-      return sendJson(res, 200, { success: true, message: 'Password updated.' });
+    if (pathname === '/api/admin/logout' && method === 'POST') {
+      const authHeader = req.headers['authorization'] || '';
+      const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+      if (token) activeAdminTokens.delete(token);
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Set-Cookie': 'admin_token=; Max-Age=0; Path=/' });
+      return res.end(JSON.stringify({ success: true }));
     }
 
     if (pathname === '/api/admin/export' && method === 'GET') {
