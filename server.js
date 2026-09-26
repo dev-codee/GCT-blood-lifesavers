@@ -159,6 +159,51 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 405, { success: false, error: 'Method not allowed' });
     }
 
+    // ---- ADMIN CONTACTS ----
+    if (pathname === '/api/contacts') {
+      if (method === 'GET') {
+        const wantsAll = parsedUrl.query.all === '1' || parsedUrl.query.all === 'true';
+        if (wantsAll && !isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
+        let contacts = await db.getContacts();
+        if (!wantsAll) {
+          contacts = contacts
+            .filter(c => c.is_active)
+            .map(c => ({ id: c.id, name: c.name, role: c.role, phone: c.phone, whatsapp: c.whatsapp, email: c.email }));
+        }
+        return sendJson(res, 200, { success: true, count: contacts.length, contacts });
+      }
+
+      if (!isAuthorized(req)) return sendJson(res, 401, { success: false, error: 'Unauthorized' });
+
+      if (method === 'POST') {
+        const body = await parseJsonBody(req);
+        if (!body.name || !body.phone) {
+          return sendJson(res, 400, { success: false, error: 'Name and phone are required.' });
+        }
+        const contactId = await db.createContact(body);
+        return sendJson(res, 201, { success: true, message: 'Contact added.', contactId });
+      }
+
+      // PUT /api/contacts?id=...
+      if (method === 'PUT') {
+        const id = parsedUrl.query.id;
+        if (!id) return sendJson(res, 400, { success: false, error: 'Missing id' });
+        const body = await parseJsonBody(req);
+        await db.updateContact(id, body);
+        return sendJson(res, 200, { success: true, message: 'Contact updated.' });
+      }
+
+      // DELETE /api/contacts?id=...
+      if (method === 'DELETE') {
+        const id = parsedUrl.query.id;
+        if (!id) return sendJson(res, 400, { success: false, error: 'Missing id' });
+        await db.deleteContact(id);
+        return sendJson(res, 200, { success: true, message: 'Contact deleted.' });
+      }
+
+      return sendJson(res, 405, { success: false, error: 'Method not allowed' });
+    }
+
     // ---- STATS ----
     if (pathname === '/api/stats' && method === 'GET') {
       const stats = await db.getStats();
