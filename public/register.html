@@ -20,21 +20,7 @@
 <body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-rose-100 selection:text-rose-900">
 
   <!-- NAVIGATION -->
-  <header class="glass-nav sticky top-0 z-40">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        <span>Back to Directory</span>
-      </a>
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-black text-rose-600">🩸 UET-lifesavers</span>
-        <button onclick="shareFormLink()" class="text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
-          <span>Share Form</span>
-        </button>
-      </div>
-    </div>
-  </header>
+  <header class="site-header"><div class="site-header-inner"><a class="site-brand" href="/"><span class="site-brand-icon" aria-hidden="true">🩸</span>UET-lifesavers</a><nav class="site-nav" aria-label="Main navigation"><a href="/">Find donors</a><a href="/urgent">Urgent requests</a><a href="/register" aria-current="page">Become a donor</a><a href="/community.html">My profile</a></nav></div></header>
 
   <!-- MAIN REGISTRATION -->
   <main class="max-w-2xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
@@ -393,5 +379,5 @@
       shareLink('UET-lifesavers Blood Donor Registration', 'Register as a voluntary donor to help save lives.', window.location.href);
     }
   </script>
-</body>
+<footer class="site-footer"><span>UET-lifesavers · Pakistan Blood Donor Directory</span><a href="/admin">Coordinator sign in</a></footer></body>
 </html>

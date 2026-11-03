@@ -128,3 +128,10 @@ Once the production domain is decided, replace the root-relative canonical paths
 ## Urgent request board
 
 `/urgent` provides city, blood-group and status filters, urgency ordering, direct calls, shareable request links, donor responses and a public request form. `/community.html` retains coordinator controls. New requests expire after 48 hours. Include `/urgent` when creating the production sitemap.
+
+
+## Shared design and expiry
+
+Public pages share the navigation, Plus Jakarta Sans typography, rose/slate colors and controls in `styles.css`; page-specific layouts live in `urgent.css` and `community.css`. Admin retains its workspace controls with shared site navigation.
+
+Open requests expire 48 hours after creation. Older requests without a deadline receive one on the next request-list read. Expired requests leave open lists and counts, while history remains available. Public open views update at the deadline even without reloading; the admin request table refreshes every 15 seconds. Status persistence is updated on API reads, so a scheduled background job is unnecessary for hiding expired requests.

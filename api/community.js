@@ -35,7 +35,7 @@ module.exports=async(req,res)=>{
  const allowed=admin?['confirmed','completed','declined']:['volunteered','withdrawn'];
  if(!allowed.includes(b.status))return send(400,{error:'Invalid response'});
  if(!admin&&b.status==='volunteered'&&donor.availability==='unavailable')return send(400,{error:'Update your availability before volunteering'});
- const filter={_id:new ObjectId(b.id),status:'open',$or:[{expires_at:{$gt:new Date().toISOString()}},{expires_at:{$exists:false}}]};
+ const filter={_id:new ObjectId(b.id),status:'open',$or:[{expires_at:{$gt:new Date().toISOString()}},{expires_at:{$exists:false},created_at:{$gt:new Date(Date.now()-172800000).toISOString()}}]};
  if(!admin)filter['responses.'+donorId+'.status']={$nin:['completed','declined']};
  if(admin)filter['responses.'+donorId]={$exists:true};
  const fields=admin?{['responses.'+donorId+'.status']:b.status,['responses.'+donorId+'.updated_at']:new Date().toISOString()}:{['responses.'+donorId]:{donorId,name:donor.name,phone:donor.phone,status:b.status,updated_at:new Date().toISOString()}};

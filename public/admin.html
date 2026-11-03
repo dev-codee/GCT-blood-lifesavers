@@ -8,8 +8,9 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
 <meta name="robots" content="noindex, nofollow">
+<script src="/request-expiry.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-rose-100 selection:text-rose-900">
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-rose-100 selection:text-rose-900"><header class="site-header"><div class="site-header-inner"><a class="site-brand" href="/"><span class="site-brand-icon" aria-hidden="true">🩸</span>UET-lifesavers</a><nav class="site-nav" aria-label="Main navigation"><a href="/" aria-current="page">Find donors</a><a href="/urgent">Urgent requests</a><a href="/register">Become a donor</a><a href="/community.html">My profile</a></nav></div></header>
 
   <!-- ========================================== -->
   <!-- LOGIN VIEW -->
@@ -841,6 +842,7 @@
       }
     }
 
+    setInterval(() => { if (!document.hidden && adminToken && !document.getElementById('dashboard-view').classList.contains('hidden')) fetchAdminEmergencies(); }, 15000);
     async function resolveEmergency(id) {
       try {
         const res = await fetch(`/api/emergency-requests?id=${encodeURIComponent(id)}`, {
