@@ -1,14 +1,18 @@
 @echo off
-title Push to GitHub - GCT Lifesavers
+title Push to GitHub - UET-lifesavers
 echo ========================================================
-echo   Pushing code to https://github.com/dev-codee/GCT-blood-lifesavers.git
+echo   Pushing UET-lifesavers to the configured GitHub origin
 echo ========================================================
 echo.
 
 set "PATH=%LOCALAPPDATA%\Programs\Git\cmd;%PATH%"
 
-git remote remove origin 2>nul
-git remote add origin https://github.com/dev-codee/GCT-blood-lifesavers.git
+git remote get-url origin >nul 2>&1
+if errorlevel 1 (
+    echo Configure a GitHub origin remote first.
+    pause
+    exit /b 1
+)
 git branch -M main
 
 echo Running git push...

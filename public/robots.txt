@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Management pages use noindex; allow crawling so that directive can be read.

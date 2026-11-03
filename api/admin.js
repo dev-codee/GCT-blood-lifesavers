@@ -82,7 +82,7 @@ module.exports = async (req, res) => {
          `"${d.city}"`, `"${d.area || ''}"`, `"${d.state || ''}"`, d.availability, d.is_verified ? 'Yes' : 'No', `"${d.created_at || ''}"`].join(',')
       )).join('\r\n');
       res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-      res.setHeader('Content-Disposition', 'attachment; filename="gct_lifesavers_donors.csv"');
+      res.setHeader('Content-Disposition', 'attachment; filename="uet_lifesavers_donors.csv"');
       res.statusCode = 200;
       return res.end(csv);
     }

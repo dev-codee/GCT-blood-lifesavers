@@ -1,4 +1,4 @@
-# 🩸 GCT Lifesavers — Blood Donor Directory & Community Network
+# 🩸 UET-lifesavers — Blood Donor Directory & Community Network
 
 A clean, modern, and minimal platform to connect voluntary blood donors with patients and hospitals in real-time.
 
@@ -37,7 +37,7 @@ This repository is pre-configured with `vercel.json` and serverless API handlers
    ```bash
    git init
    git add .
-   git commit -m "Initial commit of GCT Lifesavers Blood Donor Directory"
+   git commit -m "Initial commit of UET-lifesavers Blood Donor Directory"
    git branch -M main
    git remote add origin https://github.com/YOUR_USERNAME/blood-donor-directory.git
    git push -u origin main
@@ -105,3 +105,21 @@ Then open:
 ├── package.json           # Project metadata
 └── README.md              # Project documentation
 ```
+
+
+## Donor self-service and request coordination
+
+Open `/community.html` from the directory or admin page. Registration now supplies a private access link; save it securely because anyone holding it can edit that donor profile. Only a SHA-256 hash of its random key is stored in MongoDB. Coordinators can issue replacement links after verifying identity; replacement revokes the previous link. Existing donors need a coordinator-issued link.
+
+Donors can edit contact/location details, record their last donation date, confirm availability, or pause by selecting Unavailable. The directory shows the last confirmation date. This is a manual check-in; no SMS or WhatsApp notifications are sent.
+
+Donors can volunteer for open requests or withdraw. Coordinators can confirm, decline, or record completed donations and mark requests fulfilled. Completion counts represent recorded donor outcomes, not verified units collected. New requests expire after 48 hours; expiry is applied when requests are read. Existing requests retain their existing status until closed by a coordinator. Donation completion does not automatically change the donor's recorded donation date.
+
+Run permission and validation tests with `node --test test/community.test.js`. MongoDB configuration is required for live use. Set ADMIN_PASSWORD and ADMIN_TOKEN_SECRET before deployment.
+
+
+## Basic SEO
+
+The directory and registration pages have unique titles, descriptions, canonical paths and text sharing metadata. Duplicate entry URLs redirect permanently to `/` or `/register`. Admin and community pages use `noindex`; API responses use an `X-Robots-Tag` header. These directives control search indexing, not access permissions.
+
+Once the production domain is decided, replace the root-relative canonical paths with absolute production URLs and publish a sitemap containing only `/` and `/register`. No placeholder domain or private donor/request URLs are included.

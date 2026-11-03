@@ -1,8 +1,46 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/register", "destination": "/register.html" },
-    { "source": "/join", "destination": "/register.html" },
-    { "source": "/admin", "destination": "/admin.html" }
+    {
+      "source": "/register",
+      "destination": "/register.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/donors",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/register.html",
+      "destination": "/register",
+      "permanent": true
+    },
+    {
+      "source": "/join",
+      "destination": "/register",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
   ]
 }

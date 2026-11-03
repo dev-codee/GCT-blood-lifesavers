@@ -52,7 +52,8 @@ module.exports = async (req, res) => {
         return sendJson(res, 400, { success: false, error: 'Name, Blood Group, Phone, and City are required.' });
       }
       const donorId = await db.createDonor(body);
-      return sendJson(res, 201, { success: true, message: 'Donor registered successfully!', donorId });
+      const accessKey = await require('../lib/self-service').issueKey(donorId);
+      return sendJson(res, 201, { success: true, message: 'Donor registered successfully!', donorId, accessKey });
     }
 
     // PUT /api/donors?id=...

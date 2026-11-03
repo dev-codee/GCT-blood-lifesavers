@@ -3,10 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GCT Lifesavers — Blood Donor Directory</title>
+  <title>Find Blood Donors | UET-lifesavers</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
+  <meta name="description" content="Find voluntary blood donors by blood group, city and availability. Contact donors or register to join the UET-lifesavers donor community.">
+  <link rel="canonical" href="/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="UET-lifesavers">
+  <meta property="og:title" content="Find Blood Donors | UET-lifesavers">
+  <meta property="og:description" content="Find voluntary blood donors by blood group, city and availability. Contact donors or register to join the UET-lifesavers donor community.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Find Blood Donors | UET-lifesavers">
+  <meta name="twitter:description" content="Find voluntary blood donors by blood group, city and availability. Contact donors or register to join the UET-lifesavers donor community.">
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-rose-100 selection:text-rose-900">
 
@@ -61,7 +70,7 @@
           🩸
         </div>
         <div class="flex items-baseline gap-1.5">
-          <span class="font-extrabold text-base tracking-tight text-slate-900">GCT Lifesavers</span>
+          <span class="font-extrabold text-base tracking-tight text-slate-900">UET-lifesavers</span>
           <span class="text-[11px] font-medium text-slate-400">Directory</span>
         </div>
       </a>
@@ -238,13 +247,27 @@
     <!-- Page info bottom -->
     <div id="page-info-bottom" class="hidden mt-3 text-center text-[11px] text-slate-400"></div>
 
+    <!-- HELP / ADMIN CONTACTS -->
+    <section id="help-contacts" class="hidden mt-8 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+      <div class="flex items-start gap-3 mb-4">
+        <div class="w-9 h-9 shrink-0 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center text-base">☎️</div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">Madad Chahiye? Humse Raabta Karein</h3>
+          <p class="text-[11px] text-slate-500 leading-relaxed mt-0.5">
+            Donor dhoondhne mein mushkil ho rahi hai ya emergency hai? Neeche diye gaye numbers par direct raabta karein.
+          </p>
+        </div>
+      </div>
+      <div id="help-contacts-list" class="grid gap-2.5 sm:grid-cols-2"></div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
   <footer class="border-t border-slate-200 bg-white py-6 mt-auto">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
       <div class="flex items-center gap-1.5">
-        <span class="text-rose-600 font-bold">GCT Lifesavers</span>
+        <span class="text-rose-600 font-bold">UET-lifesavers</span>
         <span>— Pakistan Blood Donor Directory</span>
       </div>
       <div class="flex items-center gap-4">
@@ -389,7 +412,41 @@
     document.addEventListener('DOMContentLoaded', () => {
       fetchDonors();
       fetchEmergencyRequests();
+      fetchHelpContacts();
     });
+
+    // Team contact numbers, managed from the admin portal
+    async function fetchHelpContacts() {
+      const section = document.getElementById('help-contacts');
+      try {
+        const res = await fetch('/api/contacts');
+        const data = await res.json();
+        if (!data.success || !data.contacts.length) return;
+
+        document.getElementById('help-contacts-list').innerHTML = data.contacts.map(c => {
+          const wa = (c.whatsapp || c.phone || '').replace(/[^0-9+]/g, '').replace(/^\+/, '');
+          return `
+            <div class="border border-slate-200 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-slate-300 transition">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-slate-900 truncate">${escapeHtml(c.name)}</p>
+                ${c.role ? `<p class="text-[11px] text-slate-500 truncate">${escapeHtml(c.role)}</p>` : ''}
+                <p class="text-[11px] text-slate-600 font-semibold mt-0.5">${escapeHtml(c.phone)}</p>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <a href="tel:${escapeHtml(c.phone)}" title="Call"
+                  class="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold transition">Call</a>
+                ${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener" title="WhatsApp"
+                  class="px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/60 text-[11px] font-bold transition">WhatsApp</a>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        section.classList.remove('hidden');
+      } catch (err) {
+        console.error('Failed to load contacts:', err);
+      }
+    }
 
     function setBloodGroup(group) {
       currentBloodGroup = group;
@@ -578,7 +635,7 @@
               <div class="flex items-center gap-2 flex-wrap">
                 <h3 class="font-bold text-slate-900 text-sm truncate">${escapeHtml(d.name)}</h3>
                 ${verifiedBadge}
-                ${availabilityBadge}
+                ${availabilityBadge}<small class="block text-slate-500">${d.availability_confirmed_at ? "Availability checked " + escapeHtml(formatDate(d.availability_confirmed_at)) : "Availability not recently confirmed"}</small>
               </div>
               <div class="flex items-center gap-2 text-[11px] text-slate-400 mt-1 flex-wrap">
                 <span class="text-slate-600 font-medium">📍 ${escapeHtml(locationText)}</span>
@@ -643,10 +700,10 @@
     function closeShareModal() { document.getElementById('share-modal').classList.add('hidden'); }
     function copyShareUrl() { copyToClipboard(document.getElementById('share-url-input').value, 'Link copied!'); }
     function shareViaWhatsApp() {
-      const text = `🩸 GCT Lifesavers — Blood Donor Registration: ${window.location.origin + '/register'}`;
+      const text = `🩸 UET-lifesavers — Blood Donor Registration: ${window.location.origin + '/register'}`;
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
-    function nativeShare() { shareLink('GCT Lifesavers', 'Blood Donor Directory', window.location.origin + '/register'); }
+    function nativeShare() { shareLink('UET-lifesavers', 'Blood Donor Directory', window.location.origin + '/register'); }
     function openEmergencyModal() { document.getElementById('emergency-modal').classList.remove('hidden'); }
     function closeEmergencyModal() { document.getElementById('emergency-modal').classList.add('hidden'); }
     function openCompatibilityGuide() { document.getElementById('compatibility-modal').classList.remove('hidden'); }
@@ -684,5 +741,5 @@
       }
     }
   </script>
-</body>
+<a href="/community.html" style="display:block;text-align:center;padding:16px;color:#be123c">My donor profile &amp; request progress</a></body>
 </html>

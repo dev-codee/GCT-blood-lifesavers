@@ -54,13 +54,16 @@ module.exports = async (req, res) => {
     }
 
     if (method === 'PATCH') {
+      if (!isAuthorized(req)) return sendJson(res, 401, {success:false,error:'Unauthorized'});
       const id = parsedUrl.query.id;
       const body = await parseJsonBody(req);
+      if (!['open','fulfilled','expired','cancelled'].includes(body.status)) return sendJson(res,400,{success:false,error:'Invalid status'});
       await db.updateEmergencyStatus(id, body.status || 'fulfilled');
       return sendJson(res, 200, { success: true, message: 'Status updated' });
     }
 
     if (method === 'DELETE') {
+      if (!isAuthorized(req)) return sendJson(res, 401, {success:false,error:'Unauthorized'});
       const id = parsedUrl.query.id;
       await db.deleteEmergencyRequest(id);
       return sendJson(res, 200, { success: true, message: 'Deleted' });

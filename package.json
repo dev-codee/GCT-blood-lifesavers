@@ -1,5 +1,5 @@
 {
-  "name": "blood-donor-directory",
+  "name": "uet-lifesavers",
   "version": "1.0.0",
   "description": "Blood Donor Directory & Management Platform with public search, shareable registration, emergency requests, and admin dashboard",
   "main": "server.js",

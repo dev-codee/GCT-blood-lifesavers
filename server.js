@@ -62,6 +62,12 @@ const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
   const method = req.method;
+  if (pathname.startsWith('/api/')) res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  const seoRedirects = {'/index.html':'/', '/donors':'/', '/register.html':'/register', '/join':'/register'};
+  if (seoRedirects[pathname] && (method === 'GET' || method === 'HEAD')) {
+    res.writeHead(308, {Location: seoRedirects[pathname] + (parsedUrl.search || '')});
+    return res.end();
+  }
 
   if (method === 'OPTIONS') {
     res.writeHead(204, {
@@ -73,6 +79,9 @@ const server = http.createServer(async (req, res) => {
   }
 
   try {
+    if (pathname === '/api/community') return require('./api/community')(req, res);
+    if (pathname === '/api/donors') return require('./api/donors')(req, res);
+    if (pathname === '/api/emergency-requests') return require('./api/emergency-requests')(req, res);
     // ---- DONORS ----
     if (pathname === '/api/donors') {
       if (method === 'GET') {
@@ -276,6 +285,6 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`🩸 GCT Lifesavers is live at http://localhost:${PORT}/`);
+  console.log(`🩸 UET-lifesavers is live at http://localhost:${PORT}/`);
   console.log(`🍃 Using MongoDB Atlas (MONGODB_URI=${process.env.MONGODB_URI ? 'set' : 'NOT SET'})`);
 });

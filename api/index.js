@@ -9,6 +9,7 @@ module.exports = async (req, res) => {
   // Detect route from URL or matched path header
   const pathname = (req.headers['x-matched-path'] || req.headers['x-forwarded-uri'] || parsedUrl.pathname || '').toLowerCase();
 
+  if (pathname.includes('/community')) return require('./community')(req,res);
   if (pathname.includes('/donors')) {
     return donorsHandler(req, res);
   }

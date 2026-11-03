@@ -1,7 +1,7 @@
 @echo off
-title GCT Lifesavers - Blood Donor Directory
+title UET-lifesavers - Blood Donor Directory
 echo ========================================================
-echo           🩸 GCT Lifesavers Blood Donor Directory
+echo           🩸 UET-lifesavers Blood Donor Directory
 echo ========================================================
 echo.
 
