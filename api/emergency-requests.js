@@ -40,7 +40,8 @@ module.exports = async (req, res) => {
 
   try {
     if (method === 'GET') {
-      const requests = await db.getEmergencyRequests(parsedUrl.query.status || 'open');
+      const records = await db.getEmergencyRequests(parsedUrl.query.status || 'open');
+      const requests = records.map(({responses, ...request}) => request);
       return sendJson(res, 200, { success: true, requests });
     }
 
@@ -49,7 +50,10 @@ module.exports = async (req, res) => {
       if (!body.patient_name || !body.blood_group || !body.hospital_name || !body.city || !body.contact_phone) {
         return sendJson(res, 400, { success: false, error: 'Required fields missing.' });
       }
-      const requestId = await db.createEmergencyRequest(body);
+      let validated;
+      try { validated = require('../lib/request-validation').validateRequest(body); }
+      catch (error) { return sendJson(res,400,{success:false,error:error.message}); }
+      const requestId = await db.createEmergencyRequest(validated);
       return sendJson(res, 201, { success: true, message: 'Broadcasted successfully', requestId });
     }
 

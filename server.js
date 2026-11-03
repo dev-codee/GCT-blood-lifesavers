@@ -63,7 +63,7 @@ const server = http.createServer(async (req, res) => {
   const pathname = parsedUrl.pathname;
   const method = req.method;
   if (pathname.startsWith('/api/')) res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-  const seoRedirects = {'/index.html':'/', '/donors':'/', '/register.html':'/register', '/join':'/register'};
+  const seoRedirects = {'/index.html':'/', '/donors':'/', '/register.html':'/register', '/join':'/register', '/urgent.html':'/urgent'};
   if (seoRedirects[pathname] && (method === 'GET' || method === 'HEAD')) {
     res.writeHead(308, {Location: seoRedirects[pathname] + (parsedUrl.search || '')});
     return res.end();
@@ -265,6 +265,7 @@ const server = http.createServer(async (req, res) => {
       return res.end(csv);
     }
 
+    if (pathname === '/urgent') return serveFile(res, path.join(PUBLIC_DIR, 'urgent.html'));
     // ---- STATIC FILES ----
     if (pathname === '/' || pathname === '/donors') return serveFile(res, path.join(PUBLIC_DIR, 'index.html'));
     if (pathname === '/register' || pathname === '/join') return serveFile(res, path.join(PUBLIC_DIR, 'register.html'));

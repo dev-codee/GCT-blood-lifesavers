@@ -8,6 +8,10 @@
     {
       "source": "/admin",
       "destination": "/admin.html"
+    },
+    {
+      "source": "/urgent",
+      "destination": "/urgent.html"
     }
   ],
   "redirects": [
@@ -29,6 +33,11 @@
     {
       "source": "/join",
       "destination": "/register",
+      "permanent": true
+    },
+    {
+      "source": "/urgent.html",
+      "destination": "/urgent",
       "permanent": true
     }
   ],

@@ -123,3 +123,8 @@ Run permission and validation tests with `node --test test/community.test.js`. M
 The directory and registration pages have unique titles, descriptions, canonical paths and text sharing metadata. Duplicate entry URLs redirect permanently to `/` or `/register`. Admin and community pages use `noindex`; API responses use an `X-Robots-Tag` header. These directives control search indexing, not access permissions.
 
 Once the production domain is decided, replace the root-relative canonical paths with absolute production URLs and publish a sitemap containing only `/` and `/register`. No placeholder domain or private donor/request URLs are included.
+
+
+## Urgent request board
+
+`/urgent` provides city, blood-group and status filters, urgency ordering, direct calls, shareable request links, donor responses and a public request form. `/community.html` retains coordinator controls. New requests expire after 48 hours. Include `/urgent` when creating the production sitemap.
